@@ -28,7 +28,27 @@ export const TIPOS = {
     ejemploPegado: 'mitosis\tmeiosis\nósmosis\tdifusión',
     nota: 'Funciona mejor si los dos conceptos son del mismo tema pero distintos en algo importante.',
   },
+  encuesta: {
+    nombre: 'Encuestas', singular: 'encuesta',
+    ayuda: 'Una pregunta con las respuestas más dichas y sus puntos. La usa «El curso dice».',
+    campos: [['pregunta', 'Pregunta', 'Nombrá un derecho del trabajador'],
+      ['respuestas', 'Respuestas (una por línea, con sus puntos)', 'vacaciones = 30\naguinaldo = 25\nobra social = 15']],
+    formato: 'pregunta [TAB] respuesta = puntos [TAB] respuesta = puntos [TAB] …',
+    ejemploPegado: 'Nombrá un derecho del trabajador\tvacaciones = 30\taguinaldo = 25\tobra social = 15',
+    nota: 'Hasta 8 respuestas. Si no ponés puntos, se asignan de mayor a menor según el orden. Para aceptar variantes usá / (ej.: sueldo / salario = 20).',
+  },
 };
+
+const PUNTOS_POR_ORDEN = [30, 25, 20, 15, 10, 8, 6, 4];
+
+// «vacaciones / vacaciones pagas = 30» → { texto, puntos }
+export function leerRespuestas(lineas) {
+  const out = lineas.map((l) => String(l).trim()).filter(Boolean).slice(0, 8).map((l, i) => {
+    const m = l.match(/^(.*?)\s*[=:]\s*(\d+)\s*$/);
+    return m ? { texto: m[1].trim(), puntos: Number(m[2]) } : { texto: l, puntos: PUNTOS_POR_ORDEN[i] };
+  }).filter((r) => r.texto);
+  return out.sort((a, b) => b.puntos - a.puntos);
+}
 
 export function itemsDe(banco, tipo) {
   return (banco?.items || []).filter((i) => i.tipo === tipo);
@@ -69,6 +89,7 @@ export function leerPegado(tipo, texto) {
     const c = linea.split(sep).map((x) => x.trim());
     if (tipo === 'termino' && c[0] && c[1]) items.push({ tipo, termino: c[0], definicion: c.slice(1).join(' ').trim() });
     else if (tipo === 'par' && c[0] && c[1]) items.push({ tipo, a: c[0], b: c[1] });
+    else if (tipo === 'encuesta' && c[0] && c[1]) items.push({ tipo, pregunta: c[0], respuestas: leerRespuestas(c.slice(1)) });
     else if (tipo === 'pregunta' && c[0] && c[1] && c[2]) {
       items.push({ tipo, pregunta: c[0], correcta: c[1], incorrectas: c.slice(2, 5).filter(Boolean) });
     } else errores.push(i + 1);
@@ -79,6 +100,7 @@ export function leerPegado(tipo, texto) {
 function textoItem(it) {
   if (it.tipo === 'termino') return [h('b', null, it.termino), ' — ', it.definicion];
   if (it.tipo === 'par') return [h('b', null, it.a), ' / ', h('b', null, it.b)];
+  if (it.tipo === 'encuesta') return [h('b', null, it.pregunta), h('br'), h('span', { class: 'muted' }, it.respuestas.map((r) => `${r.texto} (${r.puntos})`).join(' · '))];
   return [h('b', null, it.pregunta), h('br'), h('span', { class: 'ok-txt' }, '✓ ' + it.correcta), ' · ',
     h('span', { class: 'muted' }, it.incorrectas.join(' · '))];
 }
@@ -86,11 +108,16 @@ function textoItem(it) {
 function itemDesdeForm(tipo, v) {
   if (tipo === 'termino') return v.termino && v.definicion ? { tipo, termino: v.termino, definicion: v.definicion } : null;
   if (tipo === 'par') return v.a && v.b ? { tipo, a: v.a, b: v.b } : null;
+  if (tipo === 'encuesta') {
+    const respuestas = leerRespuestas(v.respuestas.split(/\r?\n/));
+    return v.pregunta && respuestas.length >= 2 ? { tipo, pregunta: v.pregunta, respuestas } : null;
+  }
   const incorrectas = [v.inc1, v.inc2, v.inc3].filter(Boolean);
   return v.pregunta && v.correcta && incorrectas.length ? { tipo, pregunta: v.pregunta, correcta: v.correcta, incorrectas } : null;
 }
 
 function valoresDeItem(it) {
+  if (it.tipo === 'encuesta') return { ...it, respuestas: it.respuestas.map((r) => `${r.texto} = ${r.puntos}`).join('\n') };
   if (it.tipo !== 'pregunta') return it;
   const [inc1 = '', inc2 = '', inc3 = ''] = it.incorrectas;
   return { ...it, inc1, inc2, inc3 };
@@ -149,8 +176,8 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
     } },
     h('div', { class: 'etiqueta' }, editando >= 0 ? 'Editar ' + def.singular : 'Agregar ' + def.singular),
     def.campos.map(([k, label, ph]) => {
-      const largo = k === 'definicion' || k === 'pregunta';
-      inputs[k] = h(largo ? 'textarea' : 'input', { class: 'campo', id: `item-${k}`, placeholder: ph, rows: largo ? 2 : null, value: previo[k] || '' });
+      const largo = k === 'definicion' || k === 'pregunta' || k === 'respuestas';
+      inputs[k] = h(largo ? 'textarea' : 'input', { class: 'campo', id: `item-${k}`, placeholder: ph, rows: k === 'respuestas' ? 6 : largo ? 2 : null, value: previo[k] || '' });
       if (largo) inputs[k].value = previo[k] || '';
       return h('label', { class: 'pila-s' }, h('span', { class: 'etq' }, label), inputs[k]);
     }),
@@ -220,45 +247,4 @@ function hojaPegado(area, def, alAgregar) {
   document.body.append(fondo);
   area.focus();
   return cerrar;
-}
-
-// Banco de ejemplo para probar los juegos sin cargar nada.
-export function bancoEjemplo() {
-  const t = (termino, definicion) => ({ tipo: 'termino', termino, definicion });
-  const p = (pregunta, correcta, ...incorrectas) => ({ tipo: 'pregunta', pregunta, correcta, incorrectas });
-  const par = (a, b) => ({ tipo: 'par', a, b });
-  return {
-    titulo: 'La célula (ejemplo)', materia: 'Biología', curso: '2° año',
-    items: [
-      t('ADN', 'Molécula que contiene la información genética'),
-      t('bacteria', 'Organismo unicelular procariota'),
-      t('cloroplasto', 'Orgánulo donde ocurre la fotosíntesis'),
-      t('difusión', 'Paso de sustancias desde donde hay más concentración hacia donde hay menos'),
-      t('eucariota', 'Célula que tiene un núcleo definido'),
-      t('fotosíntesis', 'Proceso por el cual las plantas fabrican su alimento usando la luz'),
-      t('glucosa', 'Azúcar que las células usan como principal fuente de energía'),
-      t('hongo', 'Reino al que pertenecen las levaduras y el moho'),
-      t('lisosoma', 'Orgánulo que digiere sustancias dentro de la célula'),
-      t('mitocondria', 'Orgánulo donde se produce la energía de la célula'),
-      t('núcleo', 'Parte de la célula que guarda el material genético'),
-      t('ósmosis', 'Paso de agua a través de una membrana semipermeable'),
-      t('pared celular', 'Capa rígida que rodea a la célula vegetal'),
-      t('ribosoma', 'Estructura donde se fabrican las proteínas'),
-      t('tejido', 'Conjunto de células parecidas que cumplen una misma función'),
-      t('vacuola', 'Orgánulo que almacena agua y otras sustancias'),
-      t('citoplasma', 'Medio acuoso donde flotan los orgánulos de la célula'),
-      p('¿Qué orgánulo produce la energía de la célula?', 'mitocondria', 'ribosoma', 'vacuola', 'núcleo'),
-      p('¿Cuál de estos organismos NO tiene núcleo definido?', 'una bacteria', 'un hongo', 'una planta', 'un animal'),
-      p('¿Qué estructura tienen las células vegetales pero no las animales?', 'pared celular', 'membrana plasmática', 'citoplasma', 'ribosomas'),
-      p('¿Qué gas liberan las plantas durante la fotosíntesis?', 'oxígeno', 'dióxido de carbono', 'nitrógeno', 'hidrógeno'),
-      p('¿Dónde se fabrican las proteínas?', 'en los ribosomas', 'en los lisosomas', 'en las vacuolas', 'en la pared celular'),
-      p('¿Cuál es la unidad básica de todos los seres vivos?', 'la célula', 'el átomo', 'el tejido', 'el órgano'),
-      par('mitosis', 'meiosis'),
-      par('célula animal', 'célula vegetal'),
-      par('ósmosis', 'difusión'),
-      par('cloroplasto', 'mitocondria'),
-      par('virus', 'bacteria'),
-      par('procariota', 'eucariota'),
-    ],
-  };
 }

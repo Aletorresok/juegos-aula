@@ -332,7 +332,7 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
 
 .tv-rosco { flex: 1; min-height: 0; display: grid; grid-template-columns: auto 1fr; gap: 4vw; align-items: center; }
 .tv-anillo-caja { position: relative; }
-.anillo.tv { --d: min(54vh, 40vw); --s: calc(var(--d) * .085); }
+.anillo.en-tv { --d: min(54vh, 40vw); --s: calc(var(--d) * .085); }
 .anillo-centro { position: absolute; inset: 25%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .anillo-letra { font-family: var(--display); font-weight: 800; font-size: 5em; line-height: 1; color: var(--mark); }
 .anillo-modo { color: var(--tv-muted); font-size: .9em; }
@@ -380,5 +380,40 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
   .tv-espera, .tv-rosco { grid-template-columns: 1fr; }
   .tv-opciones { grid-template-columns: 1fr; }
   .qr-tv { width: min(60vw, 280px); }
-  .anillo.tv { --d: min(80vw, 360px); }
+  .anillo.en-tv { --d: min(80vw, 360px); }
+}
+
+/* ── El curso dice ── */
+.tablero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.casillero { display: grid; grid-template-columns: 1.8em 1fr auto; align-items: center; gap: 8px; min-height: 42px; padding: 6px 10px; border-radius: 8px; background: var(--tv-surface); color: var(--tv-tinta); font-weight: 700; }
+.cas-num { display: grid; place-items: center; width: 1.8em; height: 1.8em; border-radius: 50%; background: var(--tv-surface2); font-family: var(--mono); font-size: .85em; color: var(--tv-muted); }
+.cas-txt { overflow-wrap: anywhere; text-transform: uppercase; font-size: .92em; }
+.cas-pts { font-family: var(--mono); color: var(--mark); }
+.casillero.revelada { background: #1E4D8F; }
+.casillero.revelada .cas-num { background: var(--mark); color: var(--mark-ink); }
+.casillero.perdida { opacity: .55; }
+.tablero.en-tv { gap: 1.2vh 1.2vw; }
+.tablero.en-tv .casillero { min-height: 2.6em; font-size: 1.3em; padding: .3em .7em; border-radius: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+  .tablero.en-tv .casillero.revelada { animation: voltear .5s ease-out; }
+  @keyframes voltear { from { transform: rotateX(90deg); } to { transform: none; } }
+}
+.cruces { display: inline-flex; gap: 4px; }
+.cruces b { font-size: 1.2em; color: var(--line); }
+.cruces b.on { color: var(--bad); }
+.tablero-host { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.tablero-host li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 8px; background: var(--surface2); }
+.tablero-host li.revelada { background: color-mix(in srgb, var(--ok) 20%, var(--surface)); text-decoration: line-through; }
+.votos li.excluida { opacity: .45; text-decoration: line-through; }
+.votos li { cursor: default; }
+.tv-encuesta { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto; gap: 3vw; align-items: center; }
+.tv-encuesta-lado { display: flex; flex-direction: column; align-items: center; gap: 1.6vh; min-width: 9em; }
+.tv-pozo { font-family: var(--display); font-weight: 800; font-size: 4.5em; line-height: 1; color: var(--mark); font-variant-numeric: tabular-nums; }
+.tv .cruces b { font-size: 2.4em; color: var(--tv-surface2); }
+.tv .cruces b.on { color: var(--bad); }
+.tv-strike { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: min(40vh, 30vw); color: var(--bad); text-shadow: 0 0 40px rgb(0 0 0 / .8); pointer-events: none; animation: golpe 1.3s ease-out forwards; }
+@keyframes golpe { 0% { transform: scale(1.4); opacity: 0; } 15% { transform: scale(1); opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
+@media (max-width: 800px) and (orientation: portrait) {
+  .tv-encuesta { grid-template-columns: 1fr; }
+  .tablero.en-tv { grid-template-columns: 1fr; }
 }

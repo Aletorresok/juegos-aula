@@ -69,8 +69,8 @@ export function confirmar({ titulo, texto = '', ok = 'Aceptar', cancelar = 'Canc
 }
 
 // Hoja inferior / modal con contenido libre. Devuelve la función para cerrarla.
-export function hoja(titulo, contenido) {
-  const cerrar = () => fondo.remove();
+export function hoja(titulo, contenido, alCerrar) {
+  const cerrar = () => { fondo.remove(); alCerrar?.(); };
   const fondo = h('div', { class: 'modal-fondo', onclick: (e) => { if (e.target === fondo) cerrar(); } },
     h('div', { class: 'modal ancho', role: 'dialog', 'aria-modal': 'true' },
       h('div', { class: 'fila entre' }, h('h3', null, titulo),

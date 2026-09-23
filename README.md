@@ -10,6 +10,7 @@ instalación. Nace de la app del cumpleaños de Pau.
 |---|---|---|
 | ⚡ **Quiz por equipos** | Preguntas | Todos responden desde el celular. Cada equipo suma hasta 100 puntos según qué parte acertó. |
 | 🌀 **Rosco de repaso** | Términos | Pasapalabra por equipos, con reloj propio. La app corrige (acepta tildes, mayúsculas y errores de tipeo chicos) y el docente puede corregir a mano. |
+| 📊 **El curso dice** | Encuestas (o nada) | Al estilo de 100 argentinos dicen: adivinar las respuestas más dichas. Las encuestas salen de un banco o de lo que responde el curso en el momento. Tres errores y otro equipo puede robar el pozo. |
 | 🕵️ **El impostor conceptual** | Pares parecidos | Todos tienen la misma palabra menos uno, que no sabe que es el impostor. Pistas en voz alta y votación. |
 | ☁️ **Nube de ideas** | Nada | Pregunta abierta y nube de palabras. El docente decide cuándo mostrarla y puede ocultar palabras (los insultos comunes se ocultan solos). |
 | 🎯 **¿A quién le toca?** | Nada | Sortea un alumno o un equipo sin repetir. Funciona también con una lista pegada, sin celulares. |
@@ -17,7 +18,7 @@ instalación. Nace de la app del cumpleaños de Pau.
 ## Cómo se usa
 
 1. Entrá a la app y tocá **Soy docente →**. Entrás con tu cuenta de Google.
-2. Creá un **banco** (o usá el de ejemplo). Podés pegar filas desde una planilla de Google o Excel.
+2. Creá un **banco** o agregá uno de los **bancos listos para usar** (Construcción de Ciudadanía, Política y Ciudadanía, Trabajo y Ciudadanía, Derecho y un ejemplo de Biología). Podés pegar filas desde una planilla de Google o Excel.
 3. **Abrí una sala** y tocá **Abrir pantalla grande** en la computadora del proyector.
 4. Los chicos escanean el QR o entran con el código de 4 letras.
 5. Elegí un juego desde tu celular. Los alumnos se reparten solos en equipos (podés moverlos).
@@ -65,6 +66,7 @@ js/config.js          configuración de Firebase y colores de equipos
 js/fb.js              conexión con Firebase
 js/sala.js            estado compartido de una sala
 js/bancos.js          bancos de contenido y su editor
+js/plantillas.js      bancos listos para usar
 js/docente.js         panel docente
 js/alumno.js          vista del alumno
 js/tv.js              pantalla grande

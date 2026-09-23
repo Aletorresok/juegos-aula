@@ -345,7 +345,7 @@ export default {
         montar(el,
           h('div', { class: 'tv-rosco' },
             h('div', { class: 'tv-anillo-caja' },
-              anillo(rosco, j.corriendo ? i : -1, 'tv'),
+              anillo(rosco, j.corriendo ? i : -1, 'en-tv'),
               h('div', { class: 'anillo-centro' },
                 h('div', { class: 'anillo-letra' }, letra.l),
                 h('div', { class: 'anillo-modo' }, letra.modo === 'empieza' ? 'Empieza con' : 'Contiene'))),

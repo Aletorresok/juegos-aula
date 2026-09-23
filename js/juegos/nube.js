@@ -36,6 +36,10 @@ export function contarPalabras(respuestas) {
   }));
 }
 
+export function ofensiva(clave) {
+  return OCULTAR.has(clave) || clave.split(' ').some((w) => OCULTAR.has(w));
+}
+
 function oculta(j, clave) {
   if ((j.mostradas || []).includes(clave)) return false;
   return (j.ocultas || []).includes(clave) || OCULTAR.has(clave) || [...OCULTAR].some((m) => clave.split(' ').includes(m));

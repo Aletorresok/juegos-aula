@@ -1,7 +1,8 @@
 // Panel del docente: bancos de contenido, salas y control de los juegos.
 import { usuario, esDocente, entrarConGoogle, salir, mensajeError, alCambiarUsuario } from './fb.js';
 import { Sala, crearSala, misSalas, cerrarSala } from './sala.js';
-import { misBancos, borrarBanco, guardarBanco, editorBanco, resumenBanco, bancoEjemplo } from './bancos.js';
+import { misBancos, borrarBanco, guardarBanco, editorBanco, resumenBanco } from './bancos.js';
+import { PLANTILLAS } from './plantillas.js';
 import { JUEGOS, juego as buscarJuego } from './juegos/index.js';
 import { h, montar, toast, confirmar, hoja, urlApp, mezclar, idAzar } from './util.js';
 import { qr } from './qr.js';
@@ -104,10 +105,7 @@ async function inicio(raiz, docente) {
 
   try {
     const bancos = await misBancos(docente.uid);
-    const ejemplo = h('button', { class: 'btn sec', onclick: async () => {
-      ejemplo.disabled = true;
-      try { await guardarBanco(docente.uid, bancoEjemplo()); inicio(raiz, docente); } catch (e) { toast(mensajeError(e), 'error'); ejemplo.disabled = false; }
-    } }, 'Crear el banco de ejemplo');
+    const catalogo = h('button', { class: 'btn sec', onclick: () => catalogoPlantillas(docente, bancos, () => inicio(raiz, docente)) }, '📚 Bancos listos para usar');
     montar(zonaBancos,
       bancos.length
         ? h('ul', { class: 'bancos' }, bancos.map((b) => h('li', { class: 'tarjeta banco' },
@@ -128,9 +126,34 @@ async function inicio(raiz, docente) {
             } }, '🗑')))))
         : h('div', { class: 'tarjeta suave pila' },
           h('p', null, 'Todavía no tenés bancos. Un banco es un conjunto de contenidos de un tema (términos, preguntas y pares de conceptos) que usan los juegos.'),
-          h('p', { class: 'muted chico' }, 'Para probar, creá el banco de ejemplo («La célula») y abrí una sala.')),
-      !bancos.some((b) => b.titulo === bancoEjemplo().titulo) && ejemplo);
+          h('p', { class: 'muted chico' }, 'Para empezar rápido, agregá alguno de los bancos listos para usar.')),
+      catalogo);
   } catch (e) { montar(zonaBancos, h('p', { class: 'aviso' }, mensajeError(e))); }
+}
+
+// Catálogo de bancos listos para agregar.
+function catalogoPlantillas(docente, bancos, alTerminar) {
+  const tiene = new Set(bancos.map((b) => b.plantilla).filter(Boolean));
+  const materias = [...new Set(PLANTILLAS.map((p) => p.materia))];
+  let agregados = 0;
+  const cerrar = hoja('Bancos listos para usar', h('div', { class: 'pila' },
+    h('p', { class: 'muted chico' }, 'Se copian a «Mis bancos» y después los podés editar, sumar contenido o borrar lo que no uses. Revisá los datos antes de usarlos en clase.'),
+    materias.map((m) => h('div', { class: 'pila-s' },
+      h('div', { class: 'etiqueta' }, m),
+      h('ul', { class: 'bancos' }, PLANTILLAS.filter((p) => p.materia === m).map((p) => {
+        const boton = h('button', { class: 'btn chico' + (tiene.has(p.id) ? ' sec' : ''), disabled: tiene.has(p.id), onclick: async () => {
+          boton.disabled = true;
+          try {
+            const { id, ...datos } = p;
+            await guardarBanco(docente.uid, { ...structuredClone(datos), plantilla: id });
+            boton.textContent = '✓ Agregado'; boton.classList.add('sec'); agregados++;
+          } catch (e) { toast(mensajeError(e), 'error'); boton.disabled = false; }
+        } }, tiene.has(p.id) ? 'Ya lo tenés' : 'Agregar');
+        return h('li', { class: 'tarjeta banco' },
+          h('div', { class: 'pila-s' }, h('b', null, p.titulo), h('span', { class: 'muted chico' }, p.curso), h('span', { class: 'chico' }, resumenBanco(p))),
+          boton);
+      })))),
+    h('button', { class: 'btn grande', onclick: () => cerrar() }, 'Listo')), () => { if (agregados) alTerminar(); });
 }
 
 // ── Panel de una sala ──
