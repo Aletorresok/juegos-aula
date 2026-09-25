@@ -205,6 +205,49 @@ export const PLANTILLAS = [
     ],
   },
   {
+    id: 'escape-voto',
+    titulo: 'Escape: El voto robado', materia: 'Política y Ciudadanía', curso: '4° a 6° año',
+    items: [{
+      tipo: 'escape',
+      titulo: 'El voto robado',
+      minutos: 30,
+      intro: 'Faltan pocas horas para la elección del centro de estudiantes y alguien se llevó la urna con todos los votos. Antes de desaparecer, dejó una serie de candados con acertijos sobre la democracia. Tienen 30 minutos para abrirlos, encontrar la urna y salvar la elección. Pueden usar la Constitución Nacional.',
+      final: '¡Encontraron la urna! Los votos están a salvo y la elección se puede hacer. Sin voto universal, igual, secreto y obligatorio no hay democracia… y sin participación, tampoco.',
+      candados: [
+        {
+          titulo: 'La puerta de preceptoría', tipo: 'numero', respuesta: '1912',
+          desafio: 'En la puerta hay un papel: «La clave es el año de la ley que hizo que el voto fuera secreto y obligatorio para los varones. Antes de esa ley, se votaba cantando el voto en voz alta».',
+          pistas: ['La ley lleva el nombre del presidente que la impulsó: Roque Sáenz Peña.', 'Fue dos años antes de que empezara la Primera Guerra Mundial (1914).'],
+        },
+        {
+          titulo: 'El cuaderno de actas', tipo: 'palabra', respuesta: 'representantes',
+          desafio: 'En el cuaderno falta una palabra: «El pueblo no delibera ni gobierna sino por medio de sus ______ y autoridades creadas por esta Constitución». La palabra que falta abre el candado.',
+          pistas: ['Es el artículo 22 de la Constitución Nacional.', 'Son las personas que elegimos con el voto: diputados, senadores, presidente…'],
+        },
+        {
+          titulo: 'El armario de la dirección', tipo: 'direccion', respuesta: 'arriba,abajo,derecha,arriba',
+          desafio: 'En el armario hay un cartel: «Cada poder tiene su flecha: el Legislativo ↑, el Ejecutivo → y el Judicial ↓». Debajo, el ladrón escribió: «Primero el que hace las leyes, después el que resuelve los conflictos cuando no se cumplen, luego el que las pone en práctica y al final, otra vez, el que las hace».',
+          pistas: ['Son 4 flechas. La primera y la última son iguales.', 'Hacer leyes: Legislativo. Resolver conflictos: Judicial. Poner en práctica: Ejecutivo.'],
+        },
+        {
+          titulo: 'La caja fuerte', tipo: 'numero', respuesta: '117',
+          desafio: 'La caja fuerte pide un número de 3 cifras. Una nota dice: «Sumá los números de los artículos de la Constitución que tratan sobre los partidos políticos, la iniciativa popular y la consulta popular».',
+          pistas: ['Los tres artículos están seguidos, justo después del que habla del sufragio (el 37).', 'Partidos políticos: 38. Iniciativa popular: 39. Consulta popular: 40.'],
+        },
+        {
+          titulo: 'El candado de colores', tipo: 'color', respuesta: 'rojo,azul,verde,amarillo',
+          desafio: 'El artículo 37 dice que el sufragio es universal (azul), igual (verde), secreto (rojo) y obligatorio (amarillo). El ladrón los desordenó: el código empieza por el que asegura que nadie sepa a quién votaste, sigue el que dice que todos pueden votar, después el que hace que cada voto valga lo mismo y termina con el que nos obliga a votar.',
+          pistas: ['Son 4 colores, uno por cada característica del voto.', 'Secreto → universal → igual → obligatorio.'],
+        },
+        {
+          titulo: 'La urna', tipo: 'palabra', respuesta: 'democracia',
+          desafio: 'Encontraron la urna, pero tiene un último candado: «La palabra es la forma de gobierno en la que el poder reside en el pueblo. Argentina la recuperó en 1983 y la tenemos que cuidar entre todos».',
+          pistas: ['Viene del griego: demos (pueblo) y kratos (poder).', 'Tiene 10 letras y empieza con D.'],
+        },
+      ],
+    }],
+  },
+  {
     id: 'tyc',
     titulo: 'Derechos laborales y mundo del trabajo', materia: 'Trabajo y Ciudadanía', curso: '6° año',
     items: [

@@ -4,7 +4,8 @@ import impostor from './impostor.js';
 import nube from './nube.js';
 import ruleta from './ruleta.js';
 import encuesta from './encuesta.js';
+import escape from './escape.js';
 
-export const JUEGOS = [quiz, rosco, encuesta, impostor, nube, ruleta];
+export const JUEGOS = [escape, quiz, rosco, encuesta, impostor, nube, ruleta];
 
 export const juego = (id) => JUEGOS.find((j) => j.id === id) || null;

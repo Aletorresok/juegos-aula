@@ -1,6 +1,7 @@
 // Bancos de contenido del docente: términos, preguntas y pares de conceptos.
 import { db, doc, collection, query, where, getDocs, setDoc, deleteDoc, serverTimestamp } from './fb.js';
 import { h, montar, toast, confirmar, idAzar } from './util.js';
+import { editorEscape } from './escapes.js';
 
 export const TIPOS = {
   termino: {
@@ -36,6 +37,10 @@ export const TIPOS = {
     formato: 'pregunta [TAB] respuesta = puntos [TAB] respuesta = puntos [TAB] …',
     ejemploPegado: 'Nombrá un derecho del trabajador\tvacaciones = 30\taguinaldo = 25\tobra social = 15',
     nota: 'Hasta 8 respuestas. Si no ponés puntos, se asignan de mayor a menor según el orden. Para aceptar variantes usá / (ej.: sueldo / salario = 20).',
+  },
+  escape: {
+    nombre: 'Escapes', singular: 'escape', propio: true,
+    ayuda: 'Un escape room completo: una historia, candados con desafíos y pistas, y un final. Lo usa «Escape del aula».',
   },
 };
 
@@ -100,6 +105,7 @@ export function leerPegado(tipo, texto) {
 function textoItem(it) {
   if (it.tipo === 'termino') return [h('b', null, it.termino), ' — ', it.definicion];
   if (it.tipo === 'par') return [h('b', null, it.a), ' / ', h('b', null, it.b)];
+  if (it.tipo === 'escape') return [h('b', null, '🔐 ' + it.titulo), h('br'), h('span', { class: 'muted' }, `${it.candados.length} candados · ${it.minutos} minutos`)];
   if (it.tipo === 'encuesta') return [h('b', null, it.pregunta), h('br'), h('span', { class: 'muted' }, it.respuestas.map((r) => `${r.texto} (${r.puntos})`).join(' · '))];
   return [h('b', null, it.pregunta), h('br'), h('span', { class: 'ok-txt' }, '✓ ' + it.correcta), ' · ',
     h('span', { class: 'muted' }, it.incorrectas.join(' · '))];
@@ -128,6 +134,7 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
   const banco = structuredClone(bancoInicial || { titulo: '', materia: '', curso: '', items: [] });
   let tipo = 'termino';
   let editando = -1; // índice dentro de banco.items
+  let escapeAbierto = false;
   let cambios = false;
 
   const titulo = h('input', { class: 'campo', id: 'banco-titulo', placeholder: 'Ej.: La célula', value: banco.titulo, maxlength: 80 });
@@ -157,12 +164,25 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
 
   function dibujarTabs() {
     montar(zonaTabs, Object.entries(TIPOS).map(([t, d]) =>
-      h('button', { class: 'tab', role: 'tab', 'aria-selected': String(t === tipo), onclick: () => { tipo = t; editando = -1; dibujar(); } },
+      h('button', { class: 'tab', role: 'tab', 'aria-selected': String(t === tipo), onclick: () => { tipo = t; editando = -1; escapeAbierto = false; dibujar(); } },
         d.nombre, h('span', { class: 'tab-n' }, itemsDe(banco, t).length))));
   }
 
   function formulario() {
     const def = TIPOS[tipo];
+    if (tipo === 'escape') {
+      if (editando < 0 && !escapeAbierto) {
+        return h('button', { class: 'btn', onclick: () => { escapeAbierto = true; dibujar(); } }, '+ Nuevo escape');
+      }
+      return editorEscape(editando >= 0 ? banco.items[editando] : null, {
+        alGuardar: (it) => {
+          if (editando >= 0) banco.items[editando] = it; else banco.items.push(it);
+          editando = -1; escapeAbierto = false; cambios = true; dibujar();
+          toast('Escape listo. Acordate de guardar el banco.', 'ok');
+        },
+        alCancelar: () => { editando = -1; escapeAbierto = false; dibujar(); },
+      });
+    }
     const previo = editando >= 0 ? valoresDeItem(banco.items[editando]) : {};
     const inputs = {};
     const form = h('form', { class: 'pila tarjeta suave', onsubmit: (e) => {
@@ -207,7 +227,7 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
       formulario(),
       h('div', { class: 'fila entre' },
         h('div', { class: 'etiqueta' }, `${lista.length} ${lista.length === 1 ? def.singular : def.nombre.toLowerCase()}`),
-        h('button', { class: 'btn sec chico', onclick: pegar }, 'Pegar desde planilla')),
+        !def.propio && h('button', { class: 'btn sec chico', onclick: pegar }, 'Pegar desde planilla')),
       lista.length
         ? h('ol', { class: 'lista-items' }, lista.map(([it, i]) => h('li', { class: i === editando ? 'activo' : '' },
           h('div', { class: 'item-txt' }, textoItem(it)),

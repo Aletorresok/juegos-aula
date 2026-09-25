@@ -114,7 +114,7 @@ const ARTICULOS = /^(el|la|los|las|un|una|unos|unas|lo) /;
 export function respuestaCorrecta(escrita, aceptadas) {
   const r = normalizar(escrita).replace(ARTICULOS, '');
   if (!r) return false;
-  return String(aceptadas).split('/').some((op) => {
+  return [String(aceptadas), ...String(aceptadas).split('/')].some((op) => {
     const o = normalizar(op).replace(ARTICULOS, '');
     if (!o) return false;
     if (r === o) return true;

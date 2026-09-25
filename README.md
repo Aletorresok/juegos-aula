@@ -8,6 +8,7 @@ instalación. Nace de la app del cumpleaños de Pau.
 
 | Juego | Qué usa del banco | Cómo se juega |
 |---|---|---|
+| 🔐 **Escape del aula** | Escapes | Escape room por equipos: una historia y candados (numéricos, de palabra, de flechas o de colores) que se abren resolviendo desafíos. Un código incorrecto traba el candado unos segundos; las pistas se piden desde el celular y restan puntos. El docente puede dar pistas o abrir candados a mano. |
 | ⚡ **Quiz por equipos** | Preguntas | Todos responden desde el celular. Cada equipo suma hasta 100 puntos según qué parte acertó. |
 | 🌀 **Rosco de repaso** | Términos | Pasapalabra por equipos, con reloj propio. La app corrige (acepta tildes, mayúsculas y errores de tipeo chicos) y el docente puede corregir a mano. |
 | 📊 **El curso dice** | Encuestas (o nada) | Al estilo de 100 argentinos dicen: adivinar las respuestas más dichas. Las encuestas salen de un banco o de lo que responde el curso en el momento. Tres errores y otro equipo puede robar el pozo. |
@@ -18,7 +19,7 @@ instalación. Nace de la app del cumpleaños de Pau.
 ## Cómo se usa
 
 1. Entrá a la app y tocá **Soy docente →**. Entrás con tu cuenta de Google.
-2. Creá un **banco** o agregá uno de los **bancos listos para usar** (Construcción de Ciudadanía, Política y Ciudadanía, Trabajo y Ciudadanía, Derecho y un ejemplo de Biología). Podés pegar filas desde una planilla de Google o Excel.
+2. Creá un **banco** o agregá uno de los **bancos listos para usar** (Construcción de Ciudadanía, Política y Ciudadanía, Trabajo y Ciudadanía, Derecho, el escape «El voto robado» y un ejemplo de Biología). Podés pegar filas desde una planilla de Google o Excel.
 3. **Abrí una sala** y tocá **Abrir pantalla grande** en la computadora del proyector.
 4. Los chicos escanean el QR o entran con el código de 4 letras.
 5. Elegí un juego desde tu celular. Los alumnos se reparten solos en equipos (podés moverlos).
@@ -67,6 +68,7 @@ js/fb.js              conexión con Firebase
 js/sala.js            estado compartido de una sala
 js/bancos.js          bancos de contenido y su editor
 js/plantillas.js      bancos listos para usar
+js/escapes.js         candados, comparación de códigos y editor de escapes
 js/docente.js         panel docente
 js/alumno.js          vista del alumno
 js/tv.js              pantalla grande
