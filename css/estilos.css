@@ -508,3 +508,48 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
 .material-boton { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
 .material-boton.actual { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
 .nota-docente { white-space: pre-line; padding: 8px 10px; border-left: 4px solid var(--mark); background: var(--surface); border-radius: 6px; }
+
+/* ── ¿Cuánto apostás? ── */
+.vf { gap: 10px; }
+.btn-vf { min-height: 72px; border-radius: 14px; border: 3px solid transparent; font-weight: 800; font-size: 1.2rem; color: #fff; }
+.btn-vf.V { background: var(--ok); }
+.btn-vf.F { background: var(--bad); }
+.btn-vf.elegido { border-color: var(--ink); box-shadow: 0 0 0 3px var(--bg), 0 0 0 6px var(--ink); }
+.apuestas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.btn-apuesta { min-height: 56px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); font-family: var(--mono); font-weight: 700; font-size: 1.3rem; }
+.btn-apuesta.elegido { background: var(--mark); color: var(--mark-ink); border-color: var(--mark); }
+.tv-afirmacion { font-family: var(--display); font-weight: 700; font-size: 2.4em; line-height: 1.2; text-wrap: balance; max-width: 30ch; }
+.tv-afirmacion.chica { font-size: 1.6em; max-width: none; }
+.tv-vf { display: flex; gap: 2vw; font-weight: 800; font-size: 1.4em; }
+.tv-vf span { padding: .4em 1.2em; border-radius: 12px; }
+.tv-vf .V, .tv-veredicto.V { background: var(--ok); color: #fff; }
+.tv-vf .F, .tv-veredicto.F { background: var(--bad); color: #fff; }
+.tv-veredicto { font-family: var(--display); font-weight: 800; font-size: 3em; padding: .1em .8em; border-radius: 16px; }
+.tv-reparto { width: min(900px, 90%); display: flex; flex-direction: column; gap: 1vh; }
+.tv-reparto-fila { display: grid; grid-template-columns: 10em 1fr 4ch; gap: 1em; align-items: center; text-align: left; }
+.tv-reparto-fila.V { --c: var(--ok); }
+.tv-reparto-fila.F { --c: var(--bad); }
+.tv-reparto-fila .tv-eq-barra { height: 1em; }
+.tv-reparto-fila.correcta { font-weight: 700; }
+.tv-alerta { font-size: 1.4em; font-weight: 700; color: var(--mark); }
+
+/* ── Termómetro de opiniones ── */
+.escala { display: flex; flex-direction: column; gap: 8px; }
+.btn-escala { min-height: 54px; border-radius: 12px; border: 2px solid var(--c); background: var(--surface); font-weight: 700; text-align: left; padding: 10px 16px; border-left-width: 12px; }
+.btn-escala.elegido { background: var(--c); color: #fff; }
+.termo { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-items: end; }
+.termo-col { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+.termo-barras { height: 140px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; }
+.termo-barra { position: relative; width: 60%; min-height: 3px; border-radius: 6px 6px 0 0; transition: height .5s; }
+.termo-barra.antes { width: 25%; background: var(--line); }
+.termo-n { position: absolute; top: -1.4em; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-weight: 700; font-size: .9rem; }
+.termo-etq { text-align: center; font-size: .75rem; line-height: 1.2; color: var(--muted); }
+.termo.en-tv { flex: 1; min-height: 0; gap: 2vw; }
+.termo.en-tv .termo-barras { height: 42vh; }
+.termo.en-tv .termo-barra.antes { background: var(--tv-surface2); }
+.termo.en-tv .termo-n { font-size: 1.3em; color: var(--tv-tinta); }
+.termo.en-tv .termo-etq { font-size: .95em; color: var(--tv-muted); }
+.termo { align-items: start; }
+.tv-sub.centro { margin: 0 auto; text-align: center; max-width: none; }
+.termo.en-tv { margin-top: 1.6em; }
+.termo.en-tv .termo-barras { height: 38vh; }

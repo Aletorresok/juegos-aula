@@ -353,7 +353,7 @@ export const PLANTILLAS = [
         {
           titulo: 'La fecha del contrato', tipo: 'numero', respuesta: '2015',
           desafio: 'El contrato cita el Código Civil y Comercial que unificó el derecho civil y el comercial. ¿En qué año entró en vigencia?',
-          pistas: ['Reemplazó al Código de Vélez Sársfield, que regía desde 1871.', 'Entró en vigencia el 1° de agosto de ese año, poco más de una década después de 2004.'],
+          pistas: ['Reemplazó al Código de Vélez Sarsfield, que regía desde 1871.', 'Entró en vigencia el 1° de agosto de ese año, poco más de una década después de 2004.'],
         },
         {
           titulo: 'La ley del consumidor', tipo: 'numero', respuesta: '240',
@@ -523,3 +523,103 @@ export const PLANTILLAS = [
     ],
   },
 ];
+
+
+// ── Verdadero o falso (¿Cuánto apostás?) y consignas para debatir (Termómetro) ──
+const vf = (texto, verdadera, explicacion = '') => ({ tipo: 'afirmacion', texto, verdadera, explicacion });
+const deb = (texto) => ({ tipo: 'debate', texto });
+
+const EXTRA = {
+  'cc-derechos': [
+    vf('Los menores de 18 años no tienen derechos hasta ser adultos.', false, 'Desde la Convención sobre los Derechos del Niño y la Ley 26.061, niñas, niños y adolescentes son sujetos de derecho.'),
+    vf('A los 16 años se puede votar en las elecciones nacionales.', true, 'Desde 2012 (Ley 26.774) el voto es optativo entre los 16 y los 18 años.'),
+    vf('Votar a los 16 años es obligatorio.', false, 'Entre los 16 y los 18 años el voto es optativo.'),
+    vf('El centro de estudiantes lo eligen los propios alumnos.', true, 'Se elige por el voto de los estudiantes de la escuela.'),
+    vf('La Convención sobre los Derechos del Niño tiene jerarquía constitucional en la Argentina.', true, 'Desde la reforma de 1994 (artículo 75, inciso 22).'),
+    vf('Un estereotipo y un prejuicio son exactamente lo mismo.', false, 'El estereotipo es una imagen generalizada sobre un grupo; el prejuicio es un juicio, casi siempre negativo, antes de conocer.'),
+    vf('Los extranjeros que viven en la Argentina tienen los mismos derechos civiles que los ciudadanos.', true, 'Lo dice el artículo 20 de la Constitución Nacional.'),
+    vf('Participar solo sirve si uno es mayor de edad.', false, 'La participación empieza en la escuela: asambleas, centro de estudiantes, delegados.'),
+    deb('Los celulares deberían estar permitidos en clase.'),
+    deb('Los estudiantes deberían votar las normas de convivencia de la escuela.'),
+    deb('Votar a los 16 años debería ser obligatorio.'),
+    deb('El uniforme escolar debería ser obligatorio.'),
+  ],
+  'cc-esi': [
+    vf('La ESI solo trata sobre biología y reproducción.', false, 'Tiene cinco ejes: cuidar el cuerpo y la salud, valorar la afectividad, garantizar la equidad de género, respetar la diversidad y ejercer nuestros derechos.'),
+    vf('La ESI es obligatoria también en las escuelas privadas.', true, 'La Ley 26.150 alcanza a todas las escuelas del país, de gestión estatal y privada.'),
+    vf('Si alguien dijo que sí una vez, ya no puede cambiar de opinión.', false, 'El consentimiento se puede retirar en cualquier momento.'),
+    vf('Los celos excesivos son una muestra de amor.', false, 'Pueden ser una señal de control en la pareja.'),
+    vf('La identidad de género puede no coincidir con el sexo asignado al nacer.', true, 'Así lo reconoce la Ley de Identidad de Género (26.743, de 2012).'),
+    vf('En la Argentina, dos personas del mismo sexo se pueden casar.', true, 'Desde 2010, con la ley de matrimonio igualitario.'),
+    vf('El género es algo exclusivamente biológico.', false, 'El género es una construcción social y cultural.'),
+    vf('Revisarle el celular a la pareja sin permiso es una forma de control.', true, 'Es una de las señales de alerta de un noviazgo violento.'),
+    deb('Los chistes machistas son solo chistes.'),
+    deb('Las publicidades refuerzan los estereotipos de género.'),
+    deb('Varones y mujeres deberían hacer los mismos deportes en Educación Física.'),
+    deb('Los celos son normales en una pareja.'),
+  ],
+  'cc-digital': [
+    vf('Si borro una foto de internet, desaparece para siempre.', false, 'Pueden quedar capturas, copias y registros: la huella digital es difícil de borrar.'),
+    vf('El grooming es un delito en la Argentina.', true, 'Lo incorporó al Código Penal la Ley 26.904, de 2013.'),
+    vf('Una noticia con muchos «me gusta» es confiable.', false, 'La cantidad de likes no dice nada sobre si es verdadera: hay que verificarla en fuentes confiables.'),
+    vf('Usar la misma contraseña en todas las cuentas es seguro si la contraseña es difícil.', false, 'Si roban una cuenta, pueden entrar a todas las demás.'),
+    vf('Las redes sociales eligen con algoritmos qué contenido mostrarte.', true, 'Por eso cada persona ve cosas distintas y se forman burbujas de filtro.'),
+    vf('Compartir una foto íntima de otra persona sin su permiso es una forma de violencia.', true, 'La Ley Olimpia (27.736, de 2023) reconoce la violencia digital.'),
+    vf('Un deepfake puede imitar la voz y la cara de una persona real.', true, 'Por eso conviene desconfiar de videos y audios sorprendentes y chequear la fuente.'),
+    vf('Si un desconocido te pide que guardes un secreto, conviene contárselo a un adulto de confianza.', true, 'Pedir secreto es una señal de alerta del grooming.'),
+    deb('Los menores de 13 años no deberían tener redes sociales.'),
+    deb('Las redes sociales hacen más mal que bien.'),
+    deb('Usar inteligencia artificial para hacer la tarea es hacer trampa.'),
+    deb('Las escuelas deberían prohibir los celulares.'),
+  ],
+  pyc: [
+    vf('El voto en la Argentina es secreto.', true, 'El artículo 37 de la Constitución dice que el sufragio es universal, igual, secreto y obligatorio.'),
+    vf('La Constitución Nacional se sancionó en 1853.', true, 'Tuvo varias reformas; la más reciente, en 1994.'),
+    vf('El presidente puede disolver el Congreso.', false, 'La Constitución no lo permite: hay división de poderes.'),
+    vf('La iniciativa popular permite a la ciudadanía presentar proyectos de ley.', true, 'Está en el artículo 39 de la Constitución.'),
+    vf('Las mujeres votan en elecciones nacionales desde 1912.', false, 'El voto femenino se aprobó en 1947 (Ley 13.010) y las mujeres votaron por primera vez en 1951.'),
+    vf('Legal y legítimo significan lo mismo.', false, 'Legal es lo que respeta las leyes; legítimo es lo que la sociedad acepta como justo o válido.'),
+    vf('La última dictadura militar gobernó entre 1976 y 1983.', true, 'La democracia volvió el 10 de diciembre de 1983.'),
+    vf('En una república, los actos de gobierno tienen que ser públicos.', true, 'La publicidad de los actos es uno de los principios republicanos.'),
+    deb('El voto debería ser optativo para todas las edades.'),
+    deb('Los jueces deberían ser elegidos por el voto popular.'),
+    deb('Las redes sociales mejoran la participación política.'),
+    deb('Cortar una calle es una forma legítima de reclamo.'),
+  ],
+  tyc: [
+    vf('Si trabajo «en negro» no tengo ningún derecho.', false, 'Los derechos existen igual: el empleador está en falta y se puede reclamar la registración.'),
+    vf('El aguinaldo se paga en dos cuotas: en junio y en diciembre.', true, 'Cada cuota es la mitad del mejor sueldo del semestre.'),
+    vf('La edad mínima general para trabajar en la Argentina es 16 años.', true, 'La fijó la Ley 26.390, que prohíbe el trabajo infantil.'),
+    vf('El derecho de huelga está en la Constitución.', true, 'Lo garantiza el artículo 14 bis.'),
+    vf('Las vacaciones pagas son un beneficio que el empleador puede dar o no.', false, 'Son un derecho de todo trabajador registrado (Ley de Contrato de Trabajo).'),
+    vf('Una persona desocupada es cualquiera que no trabaja.', false, 'Desocupado es quien no tiene trabajo y lo busca activamente.'),
+    vf('Las tareas de cuidado son trabajo, aunque no se paguen.', true, 'Cuidar a niños, personas mayores o enfermas y sostener el hogar es trabajo, muchas veces invisible.'),
+    vf('Un monotributista trabaja en relación de dependencia.', false, 'El monotributo es un régimen para trabajadores independientes.'),
+    deb('La jornada laboral debería reducirse a 6 horas.'),
+    deb('Las tareas de cuidado deberían tener un salario.'),
+    deb('Las aplicaciones de reparto les dan libertad a quienes trabajan en ellas.'),
+    deb('La tecnología va a quitar más trabajos de los que crea.'),
+  ],
+  derecho: [
+    vf('La costumbre es una fuente del derecho.', true, 'Junto con la ley, la jurisprudencia y la doctrina.'),
+    vf('Las leyes rigen desde el momento en que se sancionan.', false, 'Si no dicen otra cosa, rigen después del octavo día de su publicación oficial.'),
+    vf('Una sociedad anónima es una persona jurídica.', true, 'La ley le reconoce aptitud para adquirir derechos y contraer obligaciones.'),
+    vf('La doctrina es el conjunto de fallos de los tribunales.', false, 'Eso es la jurisprudencia; la doctrina son las opiniones de los especialistas.'),
+    vf('El Código Civil y Comercial vigente es de 1871.', false, 'El actual entró en vigencia en 2015; el de 1871 era el de Vélez Sarsfield.'),
+    vf('Un contrato puede celebrarse en forma verbal.', true, 'Salvo que la ley exija una forma determinada, como la escritura para vender un inmueble.'),
+    vf('En un contrato de consumo, una cláusula abusiva se tiene por no escrita.', true, 'Así lo establecen la Ley 24.240 y el Código Civil y Comercial.'),
+    vf('A los 18 años se alcanza la mayoría de edad.', true, 'Desde 2009 (antes era a los 21).'),
+    deb('Los contratos con «letra chica» deberían estar prohibidos.'),
+    deb('Las leyes deberían escribirse en lenguaje claro para que las entienda cualquiera.'),
+    deb('A los 16 años se debería poder firmar cualquier contrato.'),
+    deb('Nadie debería poder alegar que no conocía la ley.'),
+  ],
+  celula: [
+    vf('Todas las células tienen núcleo.', false, 'Las bacterias (procariotas) no tienen núcleo definido.'),
+    vf('Las plantas liberan oxígeno en la fotosíntesis.', true, 'Toman dióxido de carbono y liberan oxígeno.'),
+    vf('Los virus son células.', false, 'No tienen estructura celular: necesitan una célula para reproducirse.'),
+    vf('Las células animales tienen pared celular.', false, 'La pared celular es propia de las células vegetales, los hongos y las bacterias.'),
+  ],
+};
+
+PLANTILLAS.forEach((p) => p.items.push(...(EXTRA[p.id] || [])));
