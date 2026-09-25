@@ -52,7 +52,7 @@ export async function existeSala(codigo) {
 export async function cerrarSala(codigo) {
   // Primero se avisa a todos, así los alumnos ven «La sala se cerró» y no «te sacaron».
   await updateDoc(refSala(codigo), { cerrada: true }).catch(() => {});
-  const subs = ['jugadores', 'respuestas', 'secretos', 'privado'];
+  const subs = ['jugadores', 'respuestas', 'secretos', 'privado', 'recursos'];
   for (const s of subs) {
     const snap = await getDocs(collection(db, 'salas', codigo, s));
     for (let i = 0; i < snap.docs.length; i += 400) {
@@ -209,6 +209,14 @@ export class Sala {
       await new Promise((r) => setTimeout(r, 500));
     }
     return null;
+  }
+
+  // Recursos del juego que todos pueden leer pero solo escribe el docente (p. ej. imágenes).
+  guardarRecurso(id, datos) { return setDoc(doc(db, 'salas', this.codigo, 'recursos', id), datos); }
+
+  async leerRecurso(id) {
+    const s = await getDoc(doc(db, 'salas', this.codigo, 'recursos', id));
+    return s.exists() ? s.data() : null;
   }
 
   async repartirSecretos(porUid) {

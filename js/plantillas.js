@@ -248,6 +248,144 @@ export const PLANTILLAS = [
     }],
   },
   {
+    id: 'escape-red',
+    titulo: 'Escape: Rescate en la red', materia: 'Construcción de Ciudadanía', curso: '1° a 3° año',
+    items: [{
+      tipo: 'escape',
+      titulo: 'Rescate en la red',
+      minutos: 25,
+      intro: 'Tomi, de 2° año, está recibiendo mensajes de alguien que dice tener 14 años y le pide fotos. Encima, le robaron la cuenta de Instagram. Tomi no sabe qué hacer y tiene miedo de contarlo. Tienen 25 minutos para entender qué está pasando, proteger su cuenta y llegar a la denuncia. Cada candado les da un número: guárdenlo, lo van a necesitar al final.',
+      final: '¡Lo lograron! Tomi guardó las pruebas, bloqueó al acosador, le contó a su familia y hicieron la denuncia. El grooming es un delito (Ley 26.904) y nunca es culpa de quien lo sufre: pedir ayuda a un adulto de confianza es el primer paso.',
+      candados: [
+        {
+          titulo: 'El chat sospechoso', tipo: 'palabra', respuesta: 'grooming',
+          desafio: 'El supuesto chico de 14 años le escribe a Tomi todos los días, le hace regalos en un juego online y le pide que «no le cuente a nadie, que es un secreto entre ellos». Ahora le pide fotos. En realidad es un adulto. ¿Cómo se llama esta forma de acoso?',
+          pistas: ['Es una palabra en inglés que se usa también en la ley argentina.', 'Empieza con G y tiene 8 letras.'],
+          recompensa: 'Primer número de la ley final: 2',
+          fisica: 'Mensaje encontrado en el celular de Tomi: «No le digas a nadie, esto es entre nosotros». Un adulto que pide secreto es una señal de alerta.',
+        },
+        {
+          titulo: 'Las contraseñas', tipo: 'numero', respuesta: '2',
+          desafio: 'Tomi usaba «123456». Estas son las opciones para su nueva contraseña:\na) Tomi2010\nb) M1Perro!Duerme#Siesta\nc) contraseña123\nd) 9Lunas&Tres_Gatos$\ne) QWERTY\n¿Cuántas cumplen TODAS estas reglas: al menos 12 caracteres, mayúsculas, minúsculas, números y símbolos?',
+          pistas: ['Contá los caracteres de cada una y fijate si tiene símbolos como ! # & _ $.', 'Solo la b y la d cumplen todo.'],
+          recompensa: 'Segundo número de la ley final: 6',
+        },
+        {
+          titulo: 'Qué hacer primero', tipo: 'direccion', respuesta: 'arriba,abajo,derecha,izquierda',
+          desafio: 'Si alguien te acosa por internet hay cuatro cosas para hacer, cada una con su flecha:\nGuardar pruebas (capturas) ↑ · Bloquear al acosador ↓ · Contarle a un adulto de confianza → · Hacer la denuncia ←\nIngresen las flechas en el orden correcto.',
+          pistas: ['Si bloqueás primero, podés perder la conversación que sirve como prueba.', 'Pruebas → bloquear → adulto → denuncia.'],
+          recompensa: 'Tercer número de la ley final: 9',
+        },
+        {
+          titulo: 'El semáforo de la privacidad', tipo: 'color', respuesta: 'rojo,verde,amarillo,rojo',
+          desafio: 'Clasifiquen cuatro datos con el semáforo: verde = se puede compartir, amarillo = con cuidado (dice dónde estás), rojo = nunca. Cada integrante del equipo tiene en su celular uno o más de los datos: juntenlos en orden y marquen los colores.',
+          partes: ['Dato 1: tu dirección.', 'Dato 2: tu banda favorita.', 'Dato 3: una foto en el patio con el uniforme de la escuela.', 'Dato 4: tu contraseña.'],
+          pistas: ['La dirección y la contraseña no se comparten nunca.', 'Rojo, verde, amarillo, rojo.'],
+          recompensa: 'Cuarto número de la ley final: 0',
+        },
+        {
+          titulo: 'El mail falso', tipo: 'palabra', respuesta: 'phishing',
+          desafio: 'Tomi recibió un mail «de Instagram» que decía que su cuenta iba a ser cerrada si no ingresaba su contraseña en un link. Así le robaron la cuenta. ¿Cómo se llama este engaño?',
+          pistas: ['Suena como «pescar» en inglés: te tiran un anzuelo.', 'Empieza con PH.'],
+          recompensa: 'Quinto número de la ley final: 4',
+        },
+        {
+          titulo: 'La denuncia', tipo: 'numero', respuesta: '26904',
+          desafio: 'Para hacer la denuncia necesitan el número de la ley que incorporó el grooming como delito al Código Penal. Lo fueron armando con los números que les dio cada candado.',
+          pistas: ['Juntá los números en el orden de los candados.', 'Es la Ley 26.904.'],
+        },
+      ],
+    }],
+  },
+  {
+    id: 'escape-paritaria',
+    titulo: 'Escape: La paritaria bloqueada', materia: 'Trabajo y Ciudadanía', curso: '6° año',
+    items: [{
+      tipo: 'escape',
+      titulo: 'La paritaria bloqueada',
+      minutos: 30,
+      intro: 'En la textil «Hilos del Sur» nadie cobró el aguinaldo, hay compañeros sin recibo de sueldo y la paritaria está trabada. Antes de irse, la delegada gremial dejó una carpeta con las pruebas… cerrada con candados. Tienen 30 minutos para abrirla y armar el reclamo.',
+      final: '¡Abrieron la carpeta! Con los recibos, el artículo 14 bis y la organización del sindicato, los trabajadores de Hilos del Sur pueden reclamar lo que les corresponde. Los derechos laborales se conquistaron colectivamente y se defienden igual.',
+      candados: [
+        {
+          titulo: 'El recibo de junio', tipo: 'numero', respuesta: '300',
+          desafio: 'Un recibo muestra que el mejor sueldo del primer semestre fue de $600.000. El aguinaldo (SAC) de junio es la mitad del mejor sueldo del semestre. ¿Cuántos MILES de pesos le corresponden de aguinaldo?',
+          pistas: ['SAC = mejor sueldo del semestre ÷ 2.', '600.000 ÷ 2 = 300.000. Escribí solo los miles.'],
+          recompensa: 'Prueba 1: el aguinaldo adeudado es de $300.000 por trabajador.',
+        },
+        {
+          titulo: 'El cartel del portón', tipo: 'palabra', respuesta: 'huelga',
+          desafio: 'En el portón pegaron el artículo 14 bis, pero la última palabra está tapada: «Queda garantizado a los gremios: concertar convenios colectivos de trabajo; recurrir a la conciliación y al arbitraje; el derecho de ______».',
+          pistas: ['Es la medida de fuerza en la que se deja de trabajar para reclamar.', 'Empieza con H y tiene 6 letras.'],
+          recompensa: 'Prueba 2: la Constitución protege la organización y la protesta de los trabajadores.',
+        },
+        {
+          titulo: 'Las fichas del personal', tipo: 'color', respuesta: 'rojo,verde,rojo,verde',
+          desafio: 'En la carpeta hay cuatro fichas del personal. Marquen en verde las que muestran un derecho respetado y en rojo las que muestran un derecho vulnerado. Cada integrante del equipo tiene en su celular una o más fichas: léanlas en voz alta, en orden.',
+          partes: ['Ficha 1: Ana trabaja hace dos años sin recibo de sueldo.', 'Ficha 2: Luis se tomó 14 días de vacaciones pagas.', 'Ficha 3: a Carla la despidieron sin causa y sin indemnización.', 'Ficha 4: Pedro tiene obra social y ART.'],
+          pistas: ['Trabajar sin recibo y un despido sin indemnización son derechos vulnerados.', 'Rojo, verde, rojo, verde.'],
+          recompensa: 'Prueba 3: hay trabajo no registrado y despidos sin indemnización.',
+        },
+        {
+          titulo: 'El camino del conflicto', tipo: 'direccion', respuesta: 'arriba,derecha,abajo,izquierda',
+          desafio: 'Cada etapa de un conflicto laboral tiene su flecha: Negociación paritaria ↑ · Conciliación obligatoria (la dicta el Estado) → · Huelga ↓ · Firma del acuerdo ←\nIngresen las flechas en el orden en que suele avanzar un conflicto que se traba.',
+          pistas: ['Primero se negocia; si no hay acuerdo, interviene el Estado.', 'Negociación → conciliación → huelga → acuerdo.'],
+          recompensa: 'Prueba 4: el reclamo puede seguir el camino legal hasta un acuerdo.',
+        },
+        {
+          titulo: 'La carpeta', tipo: 'palabra', respuesta: 'sindicato',
+          desafio: 'El último candado pide el nombre de la organización que agrupa a los trabajadores de una actividad para defender sus derechos y negociar los convenios colectivos.',
+          pistas: ['La delegada gremial pertenece a esta organización.', 'Empieza con S y tiene 9 letras.'],
+        },
+      ],
+    }],
+  },
+  {
+    id: 'escape-contrato',
+    titulo: 'Escape: El contrato trampa', materia: 'Derecho', curso: '5° año · Economía y Administración',
+    items: [{
+      tipo: 'escape',
+      titulo: 'El contrato trampa',
+      minutos: 30,
+      intro: 'Sofía se anotó en un gimnasio y ahora que se quiere dar de baja le cobran una multa equivalente a un año de cuota: «lo dice el contrato que firmaste». Su hermano, estudiante de abogacía, dejó el expediente cerrado con candados antes de irse a rendir. Tienen 30 minutos para descubrir si esa cláusula vale y cómo defenderla.',
+      final: '¡Caso resuelto! La multa es una cláusula abusiva: se tiene por no escrita. Con la Ley 24.240 y el principio de interpretación a favor del consumidor, Sofía puede darse de baja sin pagarla.',
+      candados: [
+        {
+          titulo: 'La fecha del contrato', tipo: 'numero', respuesta: '2015',
+          desafio: 'El contrato cita el Código Civil y Comercial que unificó el derecho civil y el comercial. ¿En qué año entró en vigencia?',
+          pistas: ['Reemplazó al Código de Vélez Sársfield, que regía desde 1871.', 'Entró en vigencia el 1° de agosto de ese año, poco más de una década después de 2004.'],
+        },
+        {
+          titulo: 'La ley del consumidor', tipo: 'numero', respuesta: '240',
+          desafio: 'En la tapa del expediente dice «Ley 24.___». Es la Ley de Defensa del Consumidor. Completen las tres cifras que faltan.',
+          pistas: ['Es de 1993.', 'Ley 24.240.'],
+          recompensa: 'La Ley 24.240 protege a quien compra o usa un servicio como destinatario final.',
+        },
+        {
+          titulo: 'La cláusula', tipo: 'palabra', respuesta: 'abusiva / abusivas',
+          desafio: 'Una cláusula que impone al consumidor una carga desproporcionada, como una multa de un año de cuota por darse de baja, es una cláusula ______. Se tiene por no escrita.',
+          pistas: ['Es alguien que se aprovecha de otro: abusa.', 'Empieza con A y tiene 7 letras.'],
+          recompensa: 'La cláusula de la multa no vale: se tiene por no escrita.',
+        },
+        {
+          titulo: 'La pirámide', tipo: 'color', respuesta: 'rojo,azul,verde,amarillo',
+          desafio: 'Ordenen estas normas de MAYOR a MENOR jerarquía: contrato entre las partes (amarillo), decreto del Poder Ejecutivo (verde), Constitución Nacional (rojo), ley del Congreso (azul).',
+          pistas: ['Arriba de todo está la Constitución (art. 31).', 'Constitución → ley → decreto → contrato.'],
+        },
+        {
+          titulo: 'El reclamo', tipo: 'direccion', respuesta: 'izquierda,arriba,derecha,abajo',
+          desafio: 'Cada paso del reclamo tiene su flecha: Reclamo por escrito a la empresa ← · Denuncia en Defensa del Consumidor ↑ · Audiencia de conciliación → · Juicio ↓\nIngresen el orden en que conviene avanzar.',
+          pistas: ['Primero se intenta arreglar directamente con la empresa.', 'Reclamo → denuncia → audiencia → juicio.'],
+        },
+        {
+          titulo: 'El principio final', tipo: 'palabra', respuesta: 'consumidor',
+          desafio: 'Para cerrar el caso: si hay dudas sobre cómo interpretar el contrato, se interpreta en el sentido más favorable al ______ (in dubio pro ______).',
+          pistas: ['Es Sofía en esta historia.', 'Empieza con C y tiene 10 letras.'],
+        },
+      ],
+    }],
+  },
+  {
     id: 'tyc',
     titulo: 'Derechos laborales y mundo del trabajo', materia: 'Trabajo y Ciudadanía', curso: '6° año',
     items: [

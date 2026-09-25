@@ -75,6 +75,11 @@ service cloud.firestore {
       match /privado/{doc} {
         allow read, write: if esDuenio();
       }
+
+      match /recursos/{id} {
+        allow read: if conSesion();
+        allow write: if esDuenio();
+      }
     }
   }
 }

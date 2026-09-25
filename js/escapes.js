@@ -1,5 +1,6 @@
 // Escape rooms: tipos de candado, comparación de códigos y editor de un escape.
 import { h, montar, normalizar, toast } from './util.js';
+import { qr } from './qr.js';
 
 export const COLORES = [
   { id: 'rojo', nombre: 'Rojo', color: '#D8434B' },
@@ -81,6 +82,80 @@ export function compositor(tipo, { max = 12, alCambiar } = {}) {
   };
 }
 
+// Achica una imagen para que entre en la base de datos (≈100 KB como máximo).
+export function achicarImagen(archivo) {
+  return new Promise((resolve, reject) => {
+    const lector = new FileReader();
+    lector.onerror = () => reject(new Error('No se pudo leer la imagen'));
+    lector.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('El archivo no es una imagen válida'));
+      img.onload = () => {
+        let lado = 900, calidad = 0.72, url = '';
+        for (let i = 0; i < 6; i++) {
+          const escala = Math.min(1, lado / Math.max(img.width, img.height));
+          const cv = document.createElement('canvas');
+          cv.width = Math.round(img.width * escala);
+          cv.height = Math.round(img.height * escala);
+          const ctx = cv.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, cv.width, cv.height);
+          ctx.drawImage(img, 0, 0, cv.width, cv.height);
+          url = cv.toDataURL('image/jpeg', calidad);
+          if (url.length < 140000) break;
+          lado *= 0.8; calidad = Math.max(0.45, calidad - 0.08);
+        }
+        resolve(url);
+      };
+      img.src = lector.result;
+    };
+    lector.readAsDataURL(archivo);
+  });
+}
+
+function editorImagen(c) {
+  const vista = h('div', { class: 'imagen-vista' });
+  const url = h('input', { class: 'campo', type: 'url', placeholder: 'o pegá el link de una imagen (https://…)' });
+  const pintar = () => {
+    montar(vista, c.imagen
+      ? [h('img', { src: c.imagen, alt: 'Imagen del desafío' }), h('button', { type: 'button', class: 'btn-link peligro', onclick: () => { delete c.imagen; url.value = ''; pintar(); } }, 'Quitar imagen')]
+      : h('span', { class: 'muted chico' }, 'Sin imagen'));
+  };
+  const archivo = h('input', { type: 'file', accept: 'image/*', class: 'campo' });
+  archivo.addEventListener('change', async () => {
+    const f = archivo.files?.[0];
+    if (!f) return;
+    try { c.imagen = await achicarImagen(f); url.value = ''; pintar(); } catch (e) { toast(e.message, 'error'); }
+    archivo.value = '';
+  });
+  if (c.imagen && !c.imagen.startsWith('data:')) url.value = c.imagen;
+  url.addEventListener('change', () => {
+    const v = url.value.trim();
+    if (!v) { delete c.imagen; pintar(); return; }
+    if (!/^https:\/\//.test(v)) { toast('El link tiene que empezar con https://', 'error'); return; }
+    c.imagen = v; pintar();
+  });
+  pintar();
+  return h('div', { class: 'pila-s' }, h('span', { class: 'etq' }, 'Imagen del desafío (opcional)'), archivo, url, vista);
+}
+
+// Tarjetas para imprimir con las pistas físicas (cada una con un QR que contiene el texto).
+export function imprimirTarjetas(escape) {
+  const tarjetas = escape.candados.map((c, i) => [c, i]).filter(([c]) => c.fisica?.trim());
+  if (!tarjetas.length) { toast('Este escape no tiene pistas físicas', 'error'); return; }
+  const hoja = h('div', { id: 'impresion' },
+    h('div', { class: 'imp-cabecera' }, h('b', null, escape.titulo), ' · pistas físicas para esconder en el aula'),
+    h('div', { class: 'imp-grilla' }, tarjetas.map(([c, i]) => h('div', { class: 'imp-tarjeta' },
+      h('div', { class: 'imp-titulo' }, `🔒 Candado ${i + 1}${c.titulo ? ' · ' + c.titulo : ''}`),
+      qr(c.fisica.trim(), 'qr imp-qr'),
+      h('div', { class: 'imp-pie' }, 'Escaneá con la cámara del celular')))));
+  document.body.append(hoja);
+  document.body.classList.add('imprimiendo');
+  const limpiar = () => { hoja.remove(); document.body.classList.remove('imprimiendo'); };
+  window.addEventListener('afterprint', limpiar, { once: true });
+  setTimeout(() => { window.print(); setTimeout(limpiar, 1000); }, 100);
+}
+
 export function escapeVacio() {
   return { tipo: 'escape', titulo: '', intro: '', final: '', minutos: 30, candados: [candadoVacio()] };
 }
@@ -140,7 +215,25 @@ export function editorEscape(inicial, { alGuardar, alCancelar }) {
         zonaResp),
       h('div', { class: 'grilla-2' },
         campo(c.pistas, 0, 'Pista 1 (opcional)', { ph: 'Lleva el nombre de un presidente.', max: 300 }),
-        campo(c.pistas, 1, 'Pista 2 (opcional)', { ph: 'Fue en 1912.', max: 300 })));
+        campo(c.pistas, 1, 'Pista 2 (opcional)', { ph: 'Fue en 1912.', max: 300 })),
+      opcionesAvanzadas(c));
+  }
+
+  function opcionesAvanzadas(c) {
+    const partes = h('textarea', { class: 'campo', rows: 3, maxlength: 1200, placeholder: 'Una parte por línea. Ej.:\nEl primer número es la cantidad de poderes.\nEl segundo es el artículo de la iniciativa popular.' });
+    partes.value = (c.partes || []).join('\n');
+    partes.addEventListener('input', () => { c.partes = partes.value.split(/\r?\n/).map((x) => x.trim()).filter(Boolean); });
+    const abierto = !!(c.recompensa || c.partes?.length || c.fisica || c.imagen);
+    return h('details', { class: 'mas-opciones', open: abierto },
+      h('summary', null, 'Más opciones: recompensa, información dividida, imagen, pista física'),
+      h('div', { class: 'pila' },
+        campo(c, 'recompensa', 'Recompensa al abrirlo (opcional)', { ph: 'El primer dígito del código final es 4.', max: 300 }),
+        h('p', { class: 'muted chico' }, 'Se muestra cuando el equipo abre el candado. Sirve para armar un candado final con lo que encontraron (en el modo cooperativo, lo ve todo el curso).'),
+        h('label', { class: 'pila-s' }, h('span', { class: 'etq' }, 'Información dividida (opcional)'), partes),
+        h('p', { class: 'muted chico' }, 'Cada integrante del equipo ve solo una de estas partes en su celular: tienen que hablar entre ellos para resolver el candado.'),
+        editorImagen(c),
+        campo(c, 'fisica', 'Pista física (opcional)', { area: true, ph: 'El código está debajo del escritorio del docente.', filas: 2, max: 500 }),
+        h('p', { class: 'muted chico' }, 'Se imprime como tarjeta con un código QR para esconder en el aula. Al escanearlo con la cámara del celular aparece este texto.')));
   }
 
   function dibujar() {

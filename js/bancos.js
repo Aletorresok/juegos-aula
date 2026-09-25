@@ -1,7 +1,7 @@
 // Bancos de contenido del docente: términos, preguntas y pares de conceptos.
 import { db, doc, collection, query, where, getDocs, setDoc, deleteDoc, serverTimestamp } from './fb.js';
 import { h, montar, toast, confirmar, idAzar } from './util.js';
-import { editorEscape } from './escapes.js';
+import { editorEscape, imprimirTarjetas } from './escapes.js';
 
 export const TIPOS = {
   termino: {
@@ -76,6 +76,9 @@ export async function misBancos(uid) {
 export async function guardarBanco(uid, banco) {
   const id = banco.id || idAzar(12);
   const { id: _omitido, ...datos } = banco;
+  if (JSON.stringify(datos).length > 900000) {
+    throw new Error('El banco es demasiado grande (probablemente por las imágenes). Sacá alguna imagen o pasá parte del contenido a otro banco.');
+  }
   await setDoc(doc(db, 'bancos', id), { ...datos, owner: uid, actualizado: serverTimestamp() });
   return id;
 }
@@ -232,6 +235,7 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
         ? h('ol', { class: 'lista-items' }, lista.map(([it, i]) => h('li', { class: i === editando ? 'activo' : '' },
           h('div', { class: 'item-txt' }, textoItem(it)),
           h('div', { class: 'fila nowrap' },
+            it.tipo === 'escape' && it.candados.some((c) => c.fisica?.trim()) && h('button', { class: 'btn-icono', 'aria-label': 'Imprimir pistas físicas', title: 'Imprimir pistas físicas', onclick: () => imprimirTarjetas(it) }, '🖨'),
             h('button', { class: 'btn-icono', 'aria-label': 'Editar', title: 'Editar', onclick: () => { editando = i; dibujar(); zonaTipo.scrollIntoView({ behavior: 'smooth' }); } }, '✎'),
             h('button', { class: 'btn-icono', 'aria-label': 'Borrar', title: 'Borrar', onclick: () => { banco.items.splice(i, 1); editando = -1; cambios = true; dibujar(); } }, '🗑')))))
         : h('p', { class: 'vacio' }, 'Todavía no hay ' + def.nombre.toLowerCase() + '.'));

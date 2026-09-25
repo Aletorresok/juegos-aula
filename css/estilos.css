@@ -457,3 +457,39 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
 .tv .cand { width: 2.2em; height: 2.2em; font-size: .95em; background: var(--tv-surface2); color: var(--tv-muted); border-radius: 10px; }
 .tv .cand.abierto { background: var(--ok); color: #fff; }
 .tv .cand.actual { background: var(--mark); color: var(--mark-ink); }
+
+/* ── Escape: cooperativo, recompensas, información dividida, imágenes ── */
+.coop-grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
+.coop-cand { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 10px; background: var(--surface2); border-bottom: 4px solid var(--c, var(--line)); font-size: .8rem; font-weight: 700; text-align: center; }
+.coop-num { font-family: var(--mono); font-size: 1.1rem; }
+.coop-cand.abierto { background: color-mix(in srgb, var(--ok) 25%, var(--surface)); }
+.coop-cand.final { grid-column: 1 / -1; flex-direction: row; justify-content: center; gap: 10px; font-size: 1rem; border-bottom-color: var(--mark); }
+.coop-cand.final.actual { background: color-mix(in srgb, var(--mark) 35%, var(--surface)); }
+.coop-cand.final.abierto { background: color-mix(in srgb, var(--ok) 30%, var(--surface)); }
+.coop-grilla.en-tv { grid-template-columns: repeat(auto-fill, minmax(8em, 1fr)); gap: 1.2vh 1vw; }
+.coop-grilla.en-tv .coop-cand { background: var(--tv-surface); color: var(--tv-tinta); font-size: 1em; padding: .6em .4em; border-bottom-width: 8px; }
+.coop-grilla.en-tv .coop-num { font-size: 1.6em; }
+.coop-grilla.en-tv .coop-cand.abierto { background: color-mix(in srgb, var(--ok) 35%, var(--tv-surface)); }
+.coop-grilla.en-tv .coop-cand.final { font-size: 1.4em; }
+.coop-grilla.en-tv .coop-cand.final.actual { background: color-mix(in srgb, var(--mark) 30%, var(--tv-surface)); }
+.tv-coop { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 3vh; }
+.logros { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--ok) 14%, var(--surface)); }
+.tv .logros { background: var(--tv-surface); font-size: 1.1em; padding: .8em 1.2em; }
+.mi-parte { padding: 10px 12px; border-radius: 10px; border: 2px dashed var(--accent); display: flex; flex-direction: column; gap: 4px; }
+.desafio-img { display: block; max-width: 100%; max-height: 50vh; border-radius: 8px; margin-top: 6px; background: #fff; }
+.imagen-vista img { max-width: 220px; max-height: 160px; border-radius: 8px; display: block; }
+.mas-opciones summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+.mas-opciones[open] summary { margin-bottom: 10px; }
+
+/* ── Impresión de tarjetas de pistas físicas ── */
+#impresion { display: none; }
+@media print {
+  body.imprimiendo > *:not(#impresion) { display: none !important; }
+  body.imprimiendo #impresion { display: block; color: #000; background: #fff; }
+  .imp-cabecera { font: 12pt sans-serif; margin-bottom: 8mm; }
+  .imp-grilla { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8mm; }
+  .imp-tarjeta { border: 1.5pt dashed #000; border-radius: 4mm; padding: 6mm; text-align: center; break-inside: avoid; font-family: sans-serif; }
+  .imp-titulo { font-weight: bold; font-size: 13pt; margin-bottom: 4mm; }
+  .imp-qr { width: 55mm; margin: 0 auto; }
+  .imp-pie { font-size: 9pt; margin-top: 3mm; }
+}
