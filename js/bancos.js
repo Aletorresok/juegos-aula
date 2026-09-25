@@ -2,6 +2,9 @@
 import { db, doc, collection, query, where, getDocs, setDoc, deleteDoc, serverTimestamp } from './fb.js';
 import { h, montar, toast, confirmar, idAzar } from './util.js';
 import { editorEscape, imprimirTarjetas } from './escapes.js';
+import { editorHistoria } from './historias.js';
+
+const EDITORES = { escape: editorEscape, historia: editorHistoria };
 
 export const TIPOS = {
   termino: {
@@ -54,6 +57,10 @@ export const TIPOS = {
     formato: 'una consigna por línea',
     ejemploPegado: 'Los celulares deberían estar permitidos en clase.\nLa jornada laboral debería ser de 6 horas.',
     nota: 'Funcionan mejor las afirmaciones que dividen opiniones.',
+  },
+  historia: {
+    nombre: 'Historias', singular: 'historia', propio: true,
+    ayuda: 'Historias con decisiones: en cada escena el curso vota qué hacer y la historia sigue según lo elegido. Las usa «Elegí tu propia aventura».',
   },
   escape: {
     nombre: 'Escapes', singular: 'escape', propio: true,
@@ -135,6 +142,7 @@ function textoItem(it) {
   if (it.tipo === 'par') return [h('b', null, it.a), ' / ', h('b', null, it.b)];
   if (it.tipo === 'afirmacion') return [h('b', null, it.texto), h('br'), h('span', { class: it.verdadera ? 'ok-txt' : 'mal-txt' }, it.verdadera ? 'Verdadera' : 'Falsa'), it.explicacion ? h('span', { class: 'muted' }, ' · ' + it.explicacion) : null];
   if (it.tipo === 'debate') return [h('b', null, it.texto)];
+  if (it.tipo === 'historia') return [h('b', null, '🧭 ' + it.titulo), h('br'), h('span', { class: 'muted' }, `${it.escenas.length} escenas · ${it.escenas.filter((e) => e.final).length} finales`)];
   if (it.tipo === 'escape') return [h('b', null, '🔐 ' + it.titulo), h('br'), h('span', { class: 'muted' }, `${it.candados.length} candados · ${it.minutos} minutos`)];
   if (it.tipo === 'encuesta') return [h('b', null, it.pregunta), h('br'), h('span', { class: 'muted' }, it.respuestas.map((r) => `${r.texto} (${r.puntos})`).join(' · '))];
   return [h('b', null, it.pregunta), h('br'), h('span', { class: 'ok-txt' }, '✓ ' + it.correcta), ' · ',
@@ -203,15 +211,15 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
 
   function formulario() {
     const def = TIPOS[tipo];
-    if (tipo === 'escape') {
+    if (def.propio) {
       if (editando < 0 && !escapeAbierto) {
-        return h('button', { class: 'btn', onclick: () => { escapeAbierto = true; dibujar(); } }, '+ Nuevo escape');
+        return h('button', { class: 'btn', onclick: () => { escapeAbierto = true; dibujar(); } }, `+ Nueva ${def.singular === 'escape' ? 'escape' : def.singular}`.replace('Nueva escape', 'Nuevo escape'));
       }
-      return editorEscape(editando >= 0 ? banco.items[editando] : null, {
+      return EDITORES[tipo](editando >= 0 ? banco.items[editando] : null, {
         alGuardar: (it) => {
           if (editando >= 0) banco.items[editando] = it; else banco.items.push(it);
           editando = -1; escapeAbierto = false; cambios = true; dibujar();
-          toast('Escape listo. Acordate de guardar el banco.', 'ok');
+          toast(`${def.singular[0].toUpperCase() + def.singular.slice(1)} lista. Acordate de guardar el banco.`.replace('Escape lista', 'Escape listo'), 'ok');
         },
         alCancelar: () => { editando = -1; escapeAbierto = false; dibujar(); },
       });

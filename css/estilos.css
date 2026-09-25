@@ -553,3 +553,16 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
 .tv-sub.centro { margin: 0 auto; text-align: center; max-width: none; }
 .termo.en-tv { margin-top: 1.6em; }
 .termo.en-tv .termo-barras { height: 38vh; }
+
+/* ── Elegí tu propia aventura ── */
+.opcion-editor { border-left: 3px solid var(--line); padding-left: 10px; }
+.opcion-aventura { text-align: left; }
+.tv-historia.izq { text-align: left; max-width: 60ch; font-size: 1.5em; }
+.tv-aventura-ops { display: flex; flex-direction: column; gap: 1.2vh; }
+.tv-aventura-op { display: flex; align-items: center; gap: .8em; padding: .6em 1em; border-radius: 12px; background: var(--tv-surface); font-size: 1.3em; font-weight: 700; }
+.tv-aventura-op .op-letra { background: var(--tv-surface2); color: var(--mark); }
+.tv-aventura-op.elegida { background: color-mix(in srgb, var(--mark) 30%, var(--tv-surface)); outline: 3px solid var(--mark); }
+.tv-aventura-op.apagada { opacity: .5; }
+.tv-consecuencia { font-size: 1.3em; padding: .8em 1.2em; border-radius: 12px; background: var(--tv-surface); border-left: 8px solid var(--mark); }
+.tv-recorrido { text-align: left; font-size: 1.1em; display: flex; flex-direction: column; gap: .3em; }
+.tv-muted { color: var(--tv-muted); }
