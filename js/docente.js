@@ -170,33 +170,44 @@ function catalogoPlantillas(docente, bancos, alTerminar) {
   const suyo = Object.fromEntries(bancos.filter((b) => b.plantilla).map((b) => [b.plantilla, b]));
   const materias = [...new Set(PLANTILLAS.map((p) => p.materia))];
   let agregados = 0;
+
+  function tarjeta(p) {
+    const propio = suyo[p.id];
+    // Si ya lo tiene, se ofrece sumar solo el contenido nuevo (sin tocar lo que editó).
+    const nuevos = propio ? p.items.filter((it) => !propio.items.some((x) => claveItem(x) === claveItem(it))) : [];
+    const texto = !propio ? 'Agregar' : nuevos.length ? `Sumar lo nuevo (${nuevos.length})` : 'Ya lo tenés';
+    const boton = h('button', { class: 'btn chico' + (propio && !nuevos.length ? ' sec' : ''), disabled: !!propio && !nuevos.length, onclick: async () => {
+      boton.disabled = true;
+      try {
+        if (propio) {
+          await guardarBanco(docente.uid, { ...propio, items: [...propio.items, ...structuredClone(nuevos)] });
+          boton.textContent = '✓ Actualizado';
+        } else {
+          const { id, ...datos } = p;
+          await guardarBanco(docente.uid, { ...structuredClone(datos), plantilla: id });
+          boton.textContent = '✓ Agregado';
+        }
+        boton.classList.add('sec'); agregados++;
+      } catch (e) { toast(mensajeError(e), 'error'); boton.disabled = false; }
+    } }, texto);
+    return h('li', { class: 'tarjeta banco' },
+      h('div', { class: 'pila-s' }, h('b', null, p.titulo), h('span', { class: 'muted chico' }, p.curso), h('span', { class: 'chico' }, resumenBanco(p))),
+      boton);
+  }
+
+  const secciones = materias.map((m) => h('div', { class: 'pila-s', 'data-materia': m },
+    h('div', { class: 'etiqueta' }, m),
+    h('ul', { class: 'bancos' }, PLANTILLAS.filter((p) => p.materia === m).map(tarjeta))));
+  const filtro = h('select', { class: 'campo', id: 'filtro-materia', 'aria-label': 'Filtrar por materia' },
+    h('option', { value: '' }, 'Todas las materias'), materias.map((m) => h('option', { value: m }, m)));
+  filtro.addEventListener('change', () => {
+    secciones.forEach((s) => { s.hidden = !!filtro.value && s.dataset.materia !== filtro.value; });
+  });
+
   const cerrar = hoja('Bancos listos para usar', h('div', { class: 'pila' },
     h('p', { class: 'muted chico' }, 'Se copian a «Mis bancos» y después los podés editar, sumar contenido o borrar lo que no uses. Revisá los datos antes de usarlos en clase.'),
-    materias.map((m) => h('div', { class: 'pila-s' },
-      h('div', { class: 'etiqueta' }, m),
-      h('ul', { class: 'bancos' }, PLANTILLAS.filter((p) => p.materia === m).map((p) => {
-        const propio = suyo[p.id];
-        // Si ya lo tiene, se ofrece sumar solo el contenido nuevo (sin tocar lo que editó).
-        const nuevos = propio ? p.items.filter((it) => !propio.items.some((x) => claveItem(x) === claveItem(it))) : [];
-        const texto = !propio ? 'Agregar' : nuevos.length ? `Sumar lo nuevo (${nuevos.length})` : 'Ya lo tenés';
-        const boton = h('button', { class: 'btn chico' + (propio && !nuevos.length ? ' sec' : ''), disabled: !!propio && !nuevos.length, onclick: async () => {
-          boton.disabled = true;
-          try {
-            if (propio) {
-              await guardarBanco(docente.uid, { ...propio, items: [...propio.items, ...structuredClone(nuevos)] });
-              boton.textContent = '✓ Actualizado';
-            } else {
-              const { id, ...datos } = p;
-              await guardarBanco(docente.uid, { ...structuredClone(datos), plantilla: id });
-              boton.textContent = '✓ Agregado';
-            }
-            boton.classList.add('sec'); agregados++;
-          } catch (e) { toast(mensajeError(e), 'error'); boton.disabled = false; }
-        } }, texto);
-        return h('li', { class: 'tarjeta banco' },
-          h('div', { class: 'pila-s' }, h('b', null, p.titulo), h('span', { class: 'muted chico' }, p.curso), h('span', { class: 'chico' }, resumenBanco(p))),
-          boton);
-      })))),
+    filtro,
+    secciones,
     h('button', { class: 'btn grande', onclick: () => cerrar() }, 'Listo')), () => { if (agregados) alTerminar(); });
 }
 

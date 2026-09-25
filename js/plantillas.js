@@ -4,6 +4,8 @@
 // Revisá números de ley y artículos antes de usarlos: están escritos para
 // secundaria de la provincia de Buenos Aires, pero conviene chequearlos con tu planificación.
 
+import { GENERALES } from './plantillas-generales.js';
+
 const t = (termino, definicion) => ({ tipo: 'termino', termino, definicion });
 const p = (pregunta, correcta, ...incorrectas) => ({ tipo: 'pregunta', pregunta, correcta, incorrectas });
 const par = (a, b) => ({ tipo: 'par', a, b });
@@ -757,3 +759,5 @@ const SECUENCIAS = {
   ],
 };
 PLANTILLAS.forEach((p) => p.items.push(...(SECUENCIAS[p.id] || [])));
+
+PLANTILLAS.push(...GENERALES);

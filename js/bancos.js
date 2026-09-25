@@ -42,7 +42,7 @@ export const TIPOS = {
     nota: 'Hasta 8 respuestas. Si no ponés puntos, se asignan de mayor a menor según el orden. Para aceptar variantes usá / (ej.: sueldo / salario = 20).',
   },
   afirmacion: {
-    nombre: 'Verdadero o falso', singular: 'afirmación',
+    nombre: 'Verdadero o falso', singular: 'afirmación V/F', plural: 'afirmaciones V/F',
     ayuda: 'Afirmaciones verdaderas o falsas. Las usa «¿Cuánto apostás?». Sirven mucho para desarmar mitos e ideas previas.',
     campos: [['texto', 'Afirmación', 'Si trabajo «en negro» no tengo ningún derecho.'], ['vf', '¿Verdadera o falsa? (V o F)', 'F'],
       ['explicacion', 'Explicación (se muestra al revelar, opcional)', 'Los derechos existen igual: el empleador está en falta y se puede reclamar.']],
@@ -51,7 +51,7 @@ export const TIPOS = {
     nota: 'En la segunda columna poné V o F.',
   },
   debate: {
-    nombre: 'Para debatir', singular: 'consigna',
+    nombre: 'Para debatir', singular: 'consigna para debatir', plural: 'consignas para debatir',
     ayuda: 'Afirmaciones polémicas para el «Termómetro de opiniones»: no hay respuestas correctas.',
     campos: [['texto', 'Consigna', 'Debería bajarse la edad para votar a los 14 años.']],
     formato: 'una consigna por línea',
@@ -101,7 +101,7 @@ export function resumenBanco(b) {
   return Object.entries(TIPOS)
     .map(([t, d]) => [itemsDe(b, t).length, d])
     .filter(([n]) => n > 0)
-    .map(([n, d]) => `${n} ${n === 1 ? d.singular : d.nombre.toLowerCase()}`)
+    .map(([n, d]) => `${n} ${n === 1 ? d.singular : (d.plural || d.nombre.toLowerCase())}`)
     .join(' · ') || 'Vacío';
 }
 
