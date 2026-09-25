@@ -16,6 +16,16 @@ instalación. Nace de la app del cumpleaños de Pau.
 | ☁️ **Nube de ideas** | Nada | Pregunta abierta y nube de palabras. El docente decide cuándo mostrarla y puede ocultar palabras (los insultos comunes se ocultan solos). |
 | 🎯 **¿A quién le toca?** | Nada | Sortea un alumno o un equipo sin repetir. Funciona también con una lista pegada, sin celulares. |
 
+## Portal de clases
+
+En **Mis clases** armás cada clase con links de videos y archivos de Google Drive (PDF,
+videos, imágenes, Word, PowerPoint), Presentaciones, Documentos, Hojas y Formularios de
+Google, YouTube u otras páginas; también podés importar una carpeta de Drive entera.
+Desde una sala, **Presentar una clase** muestra cada material en la pantalla grande; lo
+manejás desde el celular (con tus notas a la vista) y podés compartirlo en los celulares
+de los alumnos. Los archivos tienen que estar compartidos como «Cualquier persona con el
+enlace».
+
 ## Cómo se usa
 
 1. Entrá a la app y tocá **Soy docente →**. Entrás con tu cuenta de Google.
@@ -38,7 +48,10 @@ En la [consola de Firebase](https://console.firebase.google.com), proyecto `jueg
 2. **Ingreso de alumnos**: *Authentication → Método de acceso → Anónimo* activado.
 3. **Ingreso de docentes**: *Authentication → Método de acceso → Agregar proveedor → Google*,
    activarlo, elegir el correo de asistencia y **Guardar**.
-4. **Dominio autorizado**: *Authentication → Configuración → Dominios autorizados → Agregar dominio*:
+4. **(Opcional) Importar carpetas de Drive**: en [Google Cloud](https://console.cloud.google.com/apis/library/drive.googleapis.com?project=juegos-aula)
+   activá la **Google Drive API** para el proyecto `juegos-aula`. Si la clave de la app tiene
+   restricciones de API (*APIs y servicios → Credenciales → Browser key*), agregale la Drive API.
+5. **Dominio autorizado**: *Authentication → Configuración → Dominios autorizados → Agregar dominio*:
    `aletorresok.github.io`.
 
 ### 2. Publicar con GitHub Pages
@@ -69,6 +82,7 @@ js/sala.js            estado compartido de una sala
 js/bancos.js          bancos de contenido y su editor
 js/plantillas.js      bancos listos para usar
 js/escapes.js         candados, comparación de códigos y editor de escapes
+js/clases.js          portal de clases: materiales, links de Drive y editor
 js/docente.js         panel docente
 js/alumno.js          vista del alumno
 js/tv.js              pantalla grande

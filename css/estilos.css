@@ -493,3 +493,18 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
   .imp-qr { width: 55mm; margin: 0 auto; }
   .imp-pie { font-size: 9pt; margin-top: 3mm; }
 }
+
+/* ── Portal de clases ── */
+.materiales .material { align-items: flex-start; }
+.material-icono { font-size: 1.4rem; }
+.visor { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; }
+.visor iframe, .visor video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.visor-imagen { display: grid; place-items: center; background: #111; }
+.visor-imagen img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.visor-alumno { aspect-ratio: 4 / 3; }
+.visor-tv { flex: 1; aspect-ratio: auto; min-height: 0; border-radius: 12px; }
+.tv-clase-cab { font-size: .8em; }
+.lista-materiales { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.material-boton { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.material-boton.actual { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+.nota-docente { white-space: pre-line; padding: 8px 10px; border-left: 4px solid var(--mark); background: var(--surface); border-radius: 6px; }

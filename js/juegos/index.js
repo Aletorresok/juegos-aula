@@ -5,7 +5,8 @@ import nube from './nube.js';
 import ruleta from './ruleta.js';
 import encuesta from './encuesta.js';
 import escape from './escape.js';
+import clase from './clase.js';
 
-export const JUEGOS = [escape, quiz, rosco, encuesta, impostor, nube, ruleta];
+export const JUEGOS = [clase, escape, quiz, rosco, encuesta, impostor, nube, ruleta];
 
 export const juego = (id) => JUEGOS.find((j) => j.id === id) || null;

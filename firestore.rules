@@ -26,6 +26,13 @@ service cloud.firestore {
                     && request.resource.data.owner == request.auth.uid;
     }
 
+    match /clases/{id} {
+      allow read, delete: if esDocente() && resource.data.owner == request.auth.uid;
+      allow create: if esDocente() && request.resource.data.owner == request.auth.uid;
+      allow update: if esDocente() && resource.data.owner == request.auth.uid
+                    && request.resource.data.owner == request.auth.uid;
+    }
+
     match /salas/{codigo} {
       function sala() {
         return get(/databases/$(database)/documents/salas/$(codigo)).data;

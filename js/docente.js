@@ -3,6 +3,7 @@ import { usuario, esDocente, entrarConGoogle, salir, mensajeError, alCambiarUsua
 import { Sala, crearSala, misSalas, cerrarSala } from './sala.js';
 import { misBancos, borrarBanco, guardarBanco, editorBanco, resumenBanco } from './bancos.js';
 import { PLANTILLAS } from './plantillas.js';
+import { misClases, borrarClase, guardarClase, editorClase, iconoMaterial } from './clases.js';
 import { JUEGOS, juego as buscarJuego } from './juegos/index.js';
 import { h, montar, toast, confirmar, hoja, urlApp, mezclar, idAzar } from './util.js';
 import { qr } from './qr.js';
@@ -58,6 +59,7 @@ function cabecera(docente, extra) {
 async function inicio(raiz, docente) {
   const zonaSalas = h('div', { class: 'pila' }, h('p', { class: 'muted' }, 'Cargando…'));
   const zonaBancos = h('div', { class: 'pila' }, h('p', { class: 'muted' }, 'Cargando…'));
+  const zonaClases = h('div', { class: 'pila' }, h('p', { class: 'muted' }, 'Cargando…'));
   const cant = h('select', { class: 'campo', id: 'cant-equipos' }, [2, 3, 4, 5, 6].map((n) => h('option', { value: n, selected: n === 4 }, `${n} equipos`)));
   const botonSala = h('button', { class: 'btn grande', onclick: async () => {
     botonSala.disabled = true;
@@ -78,7 +80,39 @@ async function inicio(raiz, docente) {
       h('section', { class: 'pila' },
         h('div', { class: 'fila entre' }, h('h2', null, 'Mis bancos'),
           h('button', { class: 'btn', onclick: () => editar(null) }, '+ Nuevo banco')),
-        zonaBancos)));
+        zonaBancos),
+      h('section', { class: 'pila' },
+        h('div', { class: 'fila entre' }, h('h2', null, 'Mis clases'),
+          h('button', { class: 'btn', onclick: () => editarClase(null) }, '+ Nueva clase')),
+        h('p', { class: 'muted chico' }, 'Armá tus clases con videos, presentaciones y archivos de Google Drive para proyectarlas en la pantalla grande (desde una sala, con «Presentar una clase»).'),
+        zonaClases)));
+
+  function editarClase(clase) {
+    const cont = h('main', { class: 'contenido pila' });
+    montar(raiz, cabecera(docente), cont);
+    editorClase(cont, docente.uid, clase, () => inicio(raiz, docente));
+  }
+
+  misClases(docente.uid).then((clases) => {
+    montar(zonaClases, clases.length
+      ? h('ul', { class: 'bancos' }, clases.map((c) => h('li', { class: 'tarjeta banco' },
+        h('div', { class: 'pila-s' },
+          h('b', null, '📚 ', c.titulo),
+          h('span', { class: 'muted chico' }, [c.materia, c.curso].filter(Boolean).join(' · ')),
+          h('span', { class: 'chico' }, `${c.materiales.length} materiales `, c.materiales.slice(0, 8).map((m) => iconoMaterial(m.tipo)).join(' '))),
+        h('div', { class: 'fila nowrap' },
+          h('button', { class: 'btn sec chico', onclick: () => editarClase(c) }, 'Editar'),
+          h('button', { class: 'btn-icono', 'aria-label': 'Duplicar', title: 'Duplicar', onclick: async () => {
+            const { id: _id, ...copia } = c;
+            await guardarClase(docente.uid, { ...copia, titulo: c.titulo + ' (copia)' });
+            inicio(raiz, docente);
+          } }, '⧉'),
+          h('button', { class: 'btn-icono', 'aria-label': 'Borrar', title: 'Borrar', onclick: async () => {
+            if (!(await confirmar({ titulo: `¿Borrar la clase «${c.titulo}»?`, texto: 'Los archivos de tu Drive no se tocan.', ok: 'Borrar', peligro: true }))) return;
+            await borrarClase(c.id); inicio(raiz, docente);
+          } }, '🗑')))))
+      : h('p', { class: 'vacio' }, 'Todavía no tenés clases.'));
+  }).catch((e) => montar(zonaClases, h('p', { class: 'aviso' }, mensajeError(e))));
 
   function editar(banco) {
     const cont = h('main', { class: 'contenido pila' });
@@ -252,7 +286,7 @@ function panelSala(raiz, docente, codigo) {
           cuerpo);
         vistaJuego = def.host(cuerpo, sala);
       } else {
-        montar(zonaJuego, h('h2', null, 'Elegí un juego'),
+        montar(zonaJuego, h('h2', null, 'Elegí un juego o presentá una clase'),
           h('div', { class: 'juegos' }, JUEGOS.map((def) => h('button', { class: 'juego-tarjeta', onclick: () => configurarJuego(def) },
             h('span', { class: 'juego-icono' }, def.icono),
             h('span', { class: 'pila-s' }, h('b', null, def.nombre), h('span', { class: 'muted chico' }, def.resumen))))));
@@ -263,7 +297,9 @@ function panelSala(raiz, docente, codigo) {
 
   async function configurarJuego(def) {
     try { bancos = await misBancos(docente.uid); } catch { /* se usan los que había */ }
-    const cfg = def.configurar({ bancos, sala });
+    let clases = [];
+    if (def.id === 'clase') { try { clases = await misClases(docente.uid); } catch (e) { toast(mensajeError(e), 'error'); } }
+    const cfg = def.configurar({ bancos, sala, clases });
     const empezar = h('button', { class: 'btn grande', onclick: async () => {
       const valores = cfg.leer();
       if (!valores) return;
