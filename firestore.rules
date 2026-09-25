@@ -68,7 +68,7 @@ service cloud.firestore {
                               && exists(/databases/$(database)/documents/salas/$(codigo)/jugadores/$(uid))
                               && request.resource.data.keys().hasOnly(['juego', 'equipo', 't', 'ronda', 'valor', 'paso', 'accion', 'voto', 'palabras'])
                               && (!('valor' in request.resource.data) || request.resource.data.valor is int
-                                  || (request.resource.data.valor is string && request.resource.data.valor.size() <= 80))
+                                  || (request.resource.data.valor is string && request.resource.data.valor.size() <= 200))
                               && (!('palabras' in request.resource.data)
                                   || (request.resource.data.palabras is list && request.resource.data.palabras.size() <= 3));
         allow delete: if esDuenio();
