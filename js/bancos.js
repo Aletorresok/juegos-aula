@@ -58,6 +58,14 @@ export const TIPOS = {
     ejemploPegado: 'Los celulares deberían estar permitidos en clase.\nLa jornada laboral debería ser de 6 horas.',
     nota: 'Funcionan mejor las afirmaciones que dividen opiniones.',
   },
+  secuencia: {
+    nombre: 'Secuencias', singular: 'secuencia',
+    ayuda: 'Pasos o hechos en el orden correcto (líneas de tiempo, procesos, jerarquías). Los usa «Ordená la secuencia»: se muestran mezclados.',
+    campos: [['consigna', 'Consigna', 'Ordená cómo se sanciona una ley'], ['pasos', 'Pasos en el orden correcto (uno por línea, entre 3 y 8)', 'Un legislador presenta el proyecto\nLa cámara de origen lo aprueba\nLa cámara revisora lo aprueba\nEl Poder Ejecutivo lo promulga']],
+    formato: 'consigna [TAB] paso 1 [TAB] paso 2 [TAB] paso 3 …',
+    ejemploPegado: 'Ordená las fases de la mitosis\tProfase\tMetafase\tAnafase\tTelofase',
+    nota: 'Escribí los pasos en el orden correcto: al jugar se mezclan.',
+  },
   historia: {
     nombre: 'Historias', singular: 'historia', propio: true,
     ayuda: 'Historias con decisiones: en cada escena el curso vota qué hacer y la historia sigue según lo elegido. Las usa «Elegí tu propia aventura».',
@@ -81,7 +89,7 @@ export function leerRespuestas(lineas) {
 
 // Identifica un ítem por su contenido principal (sirve para no duplicar al sumar contenido nuevo).
 export function claveItem(it) {
-  const texto = it.termino ?? it.pregunta ?? it.texto ?? it.titulo ?? `${it.a}|${it.b}`;
+  const texto = it.termino ?? it.pregunta ?? it.texto ?? it.consigna ?? it.titulo ?? `${it.a}|${it.b}`;
   return it.tipo + ':' + String(texto).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9ñ|]+/g, ' ').trim();
 }
 
@@ -128,6 +136,7 @@ export function leerPegado(tipo, texto) {
     if (tipo === 'termino' && c[0] && c[1]) items.push({ tipo, termino: c[0], definicion: c.slice(1).join(' ').trim() });
     else if (tipo === 'par' && c[0] && c[1]) items.push({ tipo, a: c[0], b: c[1] });
     else if (tipo === 'afirmacion' && c[0] && /^[vf]/i.test(c[1] || '')) items.push({ tipo, texto: c[0], verdadera: /^v/i.test(c[1]), explicacion: c.slice(2).join(' ').trim() });
+    else if (tipo === 'secuencia' && c[0] && c.slice(1).filter(Boolean).length >= 3) items.push({ tipo, consigna: c[0], pasos: c.slice(1, 9).filter(Boolean) });
     else if (tipo === 'debate' && c[0]) items.push({ tipo, texto: c.join(' ').trim() });
     else if (tipo === 'encuesta' && c[0] && c[1]) items.push({ tipo, pregunta: c[0], respuestas: leerRespuestas(c.slice(1)) });
     else if (tipo === 'pregunta' && c[0] && c[1] && c[2]) {
@@ -142,6 +151,7 @@ function textoItem(it) {
   if (it.tipo === 'par') return [h('b', null, it.a), ' / ', h('b', null, it.b)];
   if (it.tipo === 'afirmacion') return [h('b', null, it.texto), h('br'), h('span', { class: it.verdadera ? 'ok-txt' : 'mal-txt' }, it.verdadera ? 'Verdadera' : 'Falsa'), it.explicacion ? h('span', { class: 'muted' }, ' · ' + it.explicacion) : null];
   if (it.tipo === 'debate') return [h('b', null, it.texto)];
+  if (it.tipo === 'secuencia') return [h('b', null, it.consigna), h('br'), h('span', { class: 'muted' }, it.pasos.map((x, i) => `${i + 1}. ${x}`).join(' · '))];
   if (it.tipo === 'historia') return [h('b', null, '🧭 ' + it.titulo), h('br'), h('span', { class: 'muted' }, `${it.escenas.length} escenas · ${it.escenas.filter((e) => e.final).length} finales`)];
   if (it.tipo === 'escape') return [h('b', null, '🔐 ' + it.titulo), h('br'), h('span', { class: 'muted' }, `${it.candados.length} candados · ${it.minutos} minutos`)];
   if (it.tipo === 'encuesta') return [h('b', null, it.pregunta), h('br'), h('span', { class: 'muted' }, it.respuestas.map((r) => `${r.texto} (${r.puntos})`).join(' · '))];
@@ -154,6 +164,10 @@ function itemDesdeForm(tipo, v) {
   if (tipo === 'par') return v.a && v.b ? { tipo, a: v.a, b: v.b } : null;
   if (tipo === 'afirmacion') return v.texto && /^[vf]/i.test(v.vf) ? { tipo, texto: v.texto, verdadera: /^v/i.test(v.vf), explicacion: v.explicacion || '' } : null;
   if (tipo === 'debate') return v.texto ? { tipo, texto: v.texto } : null;
+  if (tipo === 'secuencia') {
+    const pasos = v.pasos.split(/\r?\n/).map((x) => x.trim()).filter(Boolean).slice(0, 8);
+    return v.consigna && pasos.length >= 3 ? { tipo, consigna: v.consigna, pasos } : null;
+  }
   if (tipo === 'encuesta') {
     const respuestas = leerRespuestas(v.respuestas.split(/\r?\n/));
     return v.pregunta && respuestas.length >= 2 ? { tipo, pregunta: v.pregunta, respuestas } : null;
@@ -164,6 +178,7 @@ function itemDesdeForm(tipo, v) {
 
 function valoresDeItem(it) {
   if (it.tipo === 'afirmacion') return { ...it, vf: it.verdadera ? 'V' : 'F' };
+  if (it.tipo === 'secuencia') return { ...it, pasos: it.pasos.join('\n') };
   if (it.tipo === 'encuesta') return { ...it, respuestas: it.respuestas.map((r) => `${r.texto} = ${r.puntos}`).join('\n') };
   if (it.tipo !== 'pregunta') return it;
   const [inc1 = '', inc2 = '', inc3 = ''] = it.incorrectas;
@@ -237,8 +252,8 @@ export function editorBanco(el, uid, bancoInicial, alSalir) {
     } },
     h('div', { class: 'etiqueta' }, editando >= 0 ? 'Editar ' + def.singular : 'Agregar ' + def.singular),
     def.campos.map(([k, label, ph]) => {
-      const largo = ['definicion', 'pregunta', 'respuestas', 'texto', 'explicacion'].includes(k);
-      inputs[k] = h(largo ? 'textarea' : 'input', { class: 'campo', id: `item-${k}`, placeholder: ph, rows: k === 'respuestas' ? 6 : largo ? 2 : null, value: previo[k] || '' });
+      const largo = ['definicion', 'pregunta', 'respuestas', 'texto', 'explicacion', 'pasos'].includes(k);
+      inputs[k] = h(largo ? 'textarea' : 'input', { class: 'campo', id: `item-${k}`, placeholder: ph, rows: k === 'respuestas' || k === 'pasos' ? 6 : largo ? 2 : null, value: previo[k] || '' });
       if (largo) inputs[k].value = previo[k] || '';
       return h('label', { class: 'pila-s' }, h('span', { class: 'etq' }, label), inputs[k]);
     }),

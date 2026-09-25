@@ -724,3 +724,36 @@ PLANTILLAS.push(
     }],
   },
 );
+
+// ── Secuencias (Ordená la secuencia) ──
+const sec = (consigna, ...pasos) => ({ tipo: 'secuencia', consigna, pasos });
+const SECUENCIAS = {
+  'cc-derechos': [
+    sec('Ordená cómo se elige un centro de estudiantes', 'Se convoca a elecciones', 'Se presentan las listas con sus propuestas', 'Las listas hacen campaña', 'Los estudiantes votan en forma secreta', 'Se cuentan los votos', 'Asume la comisión directiva electa'),
+    sec('Ordená los pasos de una mediación', 'Las partes aceptan ir a mediación', 'Cada parte cuenta su versión', 'Se identifican los intereses de cada uno', 'Se proponen soluciones posibles', 'Se firma un acuerdo'),
+  ],
+  'cc-esi': [
+    sec('Ordená estas leyes de la más antigua a la más reciente', 'Ley de divorcio vincular', 'Ley de Educación Sexual Integral', 'Ley de matrimonio igualitario', 'Ley de Identidad de Género'),
+  ],
+  'cc-digital': [
+    sec('Ordená qué hacer si te acosan por internet', 'Guardar pruebas (capturas de pantalla)', 'Bloquear a quien acosa', 'Contarle a un adulto de confianza', 'Denunciar el perfil en la plataforma', 'Hacer la denuncia formal'),
+    sec('Ordená cómo chequear una noticia antes de compartirla', 'Leer más allá del título', 'Fijarse quién la publica', 'Buscar si otros medios confiables la publicaron', 'Revisar la fecha', 'Decidir si se comparte o no'),
+  ],
+  pyc: [
+    sec('Ordená estos hechos de la historia argentina', 'Se sanciona la Constitución Nacional', 'Ley Sáenz Peña: voto secreto y obligatorio', 'Ley del voto femenino', 'Golpe de Estado de 1976', 'Vuelve la democracia', 'Reforma de la Constitución', 'Voto optativo desde los 16 años'),
+    sec('Ordená cómo se sanciona una ley', 'Un legislador presenta el proyecto', 'La cámara de origen lo debate y lo aprueba', 'La cámara revisora lo debate y lo aprueba', 'El Poder Ejecutivo lo promulga', 'Se publica en el Boletín Oficial', 'Entra en vigencia'),
+  ],
+  tyc: [
+    sec('Ordená estas formas de organizar el trabajo, de la más antigua a la más reciente', 'Trabajo artesanal en talleres', 'Manufactura', 'Taylorismo (organización científica del trabajo)', 'Fordismo (cadena de montaje)', 'Toyotismo (producción flexible)'),
+    sec('Ordená qué hacer ante un despido sin causa', 'Recibir la comunicación del despido por escrito', 'Pedir la liquidación final', 'Revisar que incluya indemnización, preaviso y vacaciones', 'Si falta algo, reclamar por telegrama laboral', 'Ir a una audiencia de conciliación', 'Si no hay acuerdo, iniciar un juicio laboral'),
+  ],
+  derecho: [
+    sec('Ordená las normas de mayor a menor jerarquía', 'Constitución Nacional y tratados con jerarquía constitucional', 'Otros tratados internacionales', 'Leyes del Congreso', 'Decretos del Poder Ejecutivo', 'Resoluciones de los ministerios', 'Contratos entre particulares'),
+    sec('Ordená las etapas de la vida de una ley', 'Iniciativa (presentación del proyecto)', 'Sanción del Congreso', 'Promulgación del Poder Ejecutivo', 'Publicación en el Boletín Oficial', 'Entrada en vigencia'),
+  ],
+  celula: [
+    sec('Ordená las fases de la mitosis', 'Profase', 'Metafase', 'Anafase', 'Telofase'),
+    sec('Ordená de menor a mayor nivel de organización', 'Átomo', 'Molécula', 'Célula', 'Tejido', 'Órgano', 'Sistema de órganos', 'Organismo'),
+  ],
+};
+PLANTILLAS.forEach((p) => p.items.push(...(SECUENCIAS[p.id] || [])));

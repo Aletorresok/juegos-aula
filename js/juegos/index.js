@@ -9,7 +9,8 @@ import clase from './clase.js';
 import apuesta from './apuesta.js';
 import termometro from './termometro.js';
 import aventura from './aventura.js';
+import ordenar from './ordenar.js';
 
-export const JUEGOS = [clase, escape, aventura, quiz, rosco, encuesta, apuesta, impostor, termometro, nube, ruleta];
+export const JUEGOS = [clase, escape, aventura, quiz, rosco, encuesta, apuesta, ordenar, impostor, termometro, nube, ruleta];
 
 export const juego = (id) => JUEGOS.find((j) => j.id === id) || null;

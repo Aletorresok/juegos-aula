@@ -566,3 +566,27 @@ body.modo-tv { background: var(--tv-bg); color: var(--tv-tinta); overflow: hidde
 .tv-consecuencia { font-size: 1.3em; padding: .8em 1.2em; border-radius: 12px; background: var(--tv-surface); border-left: 8px solid var(--mark); }
 .tv-recorrido { text-align: left; font-size: 1.1em; display: flex; flex-direction: column; gap: .3em; }
 .tv-muted { color: var(--tv-muted); }
+
+/* ── Ordená la secuencia ── */
+.ordenable { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.ordenable-item { display: grid; grid-template-columns: 2em 1fr auto; gap: 8px; align-items: center; padding: 8px 8px 8px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.ordenable-item.movido { animation: resalte .6s ease-out; }
+@keyframes resalte { from { background: var(--accent-soft); } to { background: var(--surface); } }
+.ord-num { font-family: var(--mono); font-weight: 700; color: var(--accent); }
+.ord-txt { font-weight: 700; }
+.ord-botones { display: flex; flex-direction: column; }
+.orden-final { display: flex; flex-direction: column; gap: 4px; padding-left: 1.4em; }
+.orden-final li { padding: 4px 8px; border-radius: 6px; }
+.orden-final li.bien { background: color-mix(in srgb, var(--ok) 18%, var(--surface)); }
+.orden-final li.mal { background: color-mix(in srgb, var(--bad) 15%, var(--surface)); }
+.tv-pasos { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(14em, 1fr)); gap: 1vh 1vw; }
+.tv-pasos li { background: var(--tv-surface); border-radius: 12px; padding: .6em 1em; font-weight: 700; font-size: 1.1em; }
+.tv-pasos.correcto { display: flex; flex-direction: column; counter-reset: paso; }
+.tv-pasos.correcto li { counter-increment: paso; display: flex; justify-content: space-between; gap: 1em; }
+.tv-pasos.correcto li::before { content: counter(paso) "."; color: var(--mark); font-family: var(--mono); margin-right: .6em; }
+.tv-pasos.correcto li > span:first-child { flex: 1; }
+.tv-pasos.correcto li.dificil { outline: 3px solid var(--bad); }
+.tv-pasos.correcto.dos-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: column; grid-template-rows: repeat(4, auto); }
+.tv-pasos.correcto li { font-size: 1em; padding: .45em .9em; }
+.tv-eq { min-width: 0; }
+.tv-eq-pts { white-space: nowrap; }
