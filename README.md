@@ -43,8 +43,16 @@ cualquier otro). Si más adelante se suma contenido a un banco listo que ya ten�
   Escape «La paritaria bloqueada».
 - **Derecho**: Introducción al derecho · Organizaciones y contratos · Derechos y garantías
   constitucionales · Escape «El contrato trampa».
-- **Materias generales**: Prácticas del Lenguaje · Matemática (con el escape «La caja fuerte
-  del profe») · Historia · Geografía · Fisicoquímica · Inglés · Biología (ejemplo).
+- **Ciclo básico**: Ciencias Naturales y Ciencias Sociales (1° año) · Prácticas del Lenguaje ·
+  Matemática (con el escape «La caja fuerte del profe») · Historia · Geografía · Fisicoquímica ·
+  Biología (con el escape «Brote en la escuela») · Inglés.
+- **Ciclo superior**: Literatura · Matemática (funciones, trigonometría y probabilidad) · Historia
+  argentina del siglo XX (con el escape «El archivo del diario») · Geografía (ambiente y mundo
+  global) · Química (con el escape «El laboratorio cerrado») · Física · Salud y Adolescencia ·
+  NTICx · Psicología · Filosofía.
+- **Economía y Administración**: Economía Política · Sistemas de Información Contable · Teoría
+  de las Organizaciones.
+- **Para todos los años**: Educación Física · Educación Artística.
 
 Revisá los datos antes de usarlos en clase.
 
@@ -108,6 +116,7 @@ js/sala.js                 estado compartido de una sala
 js/bancos.js               bancos de contenido y su editor
 js/plantillas.js           bancos listos para usar
 js/plantillas-generales.js bancos listos de Derecho y materias generales
+js/plantillas-materias.js  más materias del diseño curricular bonaerense
 js/escapes.js              candados, comparación de códigos y editor de escapes
 js/historias.js            historias con decisiones y su editor
 js/clases.js               portal de clases: materiales, links de Drive y editor

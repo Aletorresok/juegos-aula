@@ -5,6 +5,7 @@
 // secundaria de la provincia de Buenos Aires, pero conviene chequearlos con tu planificación.
 
 import { GENERALES } from './plantillas-generales.js';
+import { MATERIAS } from './plantillas-materias.js';
 
 const t = (termino, definicion) => ({ tipo: 'termino', termino, definicion });
 const p = (pregunta, correcta, ...incorrectas) => ({ tipo: 'pregunta', pregunta, correcta, incorrectas });
@@ -760,4 +761,4 @@ const SECUENCIAS = {
 };
 PLANTILLAS.forEach((p) => p.items.push(...(SECUENCIAS[p.id] || [])));
 
-PLANTILLAS.push(...GENERALES);
+PLANTILLAS.push(...GENERALES, ...MATERIAS);
